@@ -1,24 +1,8 @@
 ---
 import RootLayout from "../layout/root-layout.astro"
+import WorkExperienceSection from "../components/work-experience-section.astro"
+import KindWordsSection from "../components/kind-words-section.astro"
 import Link from "../components/link.astro"
-
-const WORK_EXPERIENCE = [
-  {
-    title: "web developer @gioseppo",
-    period: "march 2024 - present",
-    description: "developing the company's e-commerce platform & internal tools."
-  },
-  {
-    title: "freelance developer",
-    period: "june 2022 - march 2024",
-    description: "developed websites and mobile apps for local companies. increased online visibility and helped to automate processes."
-  },
-  {
-    title: "IT technician internship @mundozone",
-    period: "march 2022 - june 2022",
-    description: "maintained computer systems and network infrastructure. managed sales on online platforms. provided customer service."
-  },
-]
 ---
 
 <RootLayout
@@ -40,6 +24,7 @@ const WORK_EXPERIENCE = [
       >
         gioseppo.
       </Link>
+    </p>
     <p>
       i'm passionate about programming, space, and technology as a whole. i love to learn new things and share my knowledge with others.
     </p>
@@ -50,22 +35,9 @@ const WORK_EXPERIENCE = [
       and sharing time with my family.
     <p>
     </div>
-
   </section>
 
-  <section class="py-6">
-    <h2 class="pb-2 text-lg font-bold text-stone-200">work experience</h2>
+  <WorkExperienceSection />
 
-    <ul class="flex flex-col gap-3 text-sm">
-      {WORK_EXPERIENCE.map((experience) => (
-        <li class="gap-6 justify-between sm:flex">
-          <div class="max-w-sm">
-            <h3 class="font-bold">{experience.title}</h3>
-            <p>{experience.description}</p>
-          </div>
-          <span class="text-stone-400 text-nowrap">{experience.period}</span>
-        </li>
-      ))}
-    </ul>
-  </section>
+  <KindWordsSection />
 </RootLayout>

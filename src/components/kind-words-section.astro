@@ -1,0 +1,31 @@
+---
+const KIND_WORDS = [
+  {
+    name: "javier arbizu",
+    position: "CEO of arbicuir, S.L.",
+    quote: "he did a great job with our website. always willing to help and explain everything in detail."
+  },
+  {
+    name: "hamid bchour",
+    position: "owner of barbería HB",
+    quote: "we have had multiple clients come to us thanks to our new website. he has been very attentive and professional."
+  },
+]
+---
+
+<section class="py-6">
+  <h2 class="pb-2 text-lg font-bold text-stone-200">kind words</h2>
+  <p>here are some nice things people have said about me:</p>
+
+  <ul class="flex flex-col gap-4 text-sm pt-4">
+    {KIND_WORDS.map((kindWord) => (
+      <li class="gap-6 justify-between sm:flex">
+        <div class="max-w-md">
+          <p class="font-bold">{kindWord.name}</p>
+          <p class="text-stone-400 pb-1">{kindWord.position}</p>
+          <p>{kindWord.quote}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+</section>
