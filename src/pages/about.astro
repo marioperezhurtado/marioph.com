@@ -1,0 +1,71 @@
+---
+import RootLayout from "../layouts/root-layout.astro"
+import Link from "../components/link.astro"
+
+const WORK_EXPERIENCE = [
+  {
+    title: "web developer @gioseppo",
+    period: "march 2024 - present",
+    description: "developing the company's e-commerce platform & internal tools."
+  },
+  {
+    title: "freelance developer",
+    period: "june 2022 - march 2024",
+    description: "developed websites and mobile apps for local companies. increased online visibility and helped to automate processes."
+  },
+  {
+    title: "IT technician internship @mundozone",
+    period: "march 2022 - june 2022",
+    description: "maintained computer systems and network infrastructure. managed sales on online platforms. provided customer service."
+  },
+]
+---
+
+<RootLayout
+  title="about"
+  description=""
+>
+  <section class="py-6">
+    <h2 class="pb-2 text-lg font-bold text-stone-200">about me</h2>
+
+    <div class="flex flex-col gap-4">
+    <p>
+      i'm a web developer & tech enthusiast based in spain. i am currently
+      working at 
+      <Link 
+        href="/https://www.linkedin.com/company/gioseppo"
+        target="_blank"
+        rel="noopener noreferrer"
+        bold
+      >
+        gioseppo.
+      </Link>
+    <p>
+      i'm passionate about programming, space, and technology as a whole. i love to learn new things and share my knowledge with others.
+    </p>
+    <p>
+      when i'm not coding, you can find me reading, hitting the gym, listening
+      to some 
+      <Link href="/music" bold>fine tunes</Link> 
+      and sharing time with my family.
+    <p>
+    </div>
+
+  </section>
+
+  <section class="py-6">
+    <h2 class="pb-2 text-lg font-bold text-stone-200">work experience</h2>
+
+    <ul class="flex flex-col gap-3 text-sm">
+      {WORK_EXPERIENCE.map((experience) => (
+        <li class="gap-6 justify-between sm:flex">
+          <div class="max-w-sm">
+            <h3 class="font-bold">{experience.title}</h3>
+            <p>{experience.description}</p>
+          </div>
+          <span class="text-stone-400 text-nowrap">{experience.period}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+</RootLayout>

@@ -1,0 +1,50 @@
+---
+import RootLayout from "../layouts/root-layout.astro"
+import Link from "../components/link.astro"
+import SocialLinks from "../components/social-links.astro"
+import ProjectsSection from "../components/projects-section.astro"
+import BlogSection from "../components/blog-section.astro"
+---
+
+<RootLayout 
+  title="home"
+  description="hi there, i'm mario. i build stuff and learn along the way."
+>
+  <section class="py-6">
+    <p class="pb-4">
+      hi there, i'm mario. i build stuff and learn along the way. i'm
+      currently working as a web developer at 
+      <Link 
+        href="/https://www.linkedin.com/company/gioseppo"
+        target="_blank"
+        rel="noopener noreferrer"
+        bold
+      >
+        gioseppo.
+      </Link>
+      welcome to my personal site.
+    </p>
+
+    <SocialLinks />
+  </section>
+
+  <ProjectsSection />
+
+  <BlogSection />
+
+  <section class="py-6">
+    <h2 class="pb-2 text-lg font-bold text-stone-200">get in touch</h2>
+    <p>
+      email me at 
+      <Link 
+        href="mailto:marioph10@gmail.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        bold
+      >
+        marioph10@gmail.com
+      </Link>
+      or check my social links.
+    </p>
+  </section>
+</RootLayout>

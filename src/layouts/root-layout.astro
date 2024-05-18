@@ -1,0 +1,39 @@
+---
+import '@fontsource/geist-mono'
+
+import { ViewTransitions } from 'astro:transitions'
+import Header from '../components/header.astro'
+import Footer from '../components/footer.astro'
+
+interface Props {
+  title: string
+  description: string
+}
+
+const { title, description } = Astro.props
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>marioph • {title}</title>
+    <meta name="description" content={description} />
+    <ViewTransitions />
+	</head>
+	<body class="font-mono bg-stone-900 text-stone-300">
+    <main class="flex flex-col py-10 px-5 mx-auto max-w-screen-sm min-h-screen">
+      <Header />
+      <slot/>
+      <Footer />
+    </main>
+	</body>
+
+  <style>
+    body {
+      overflow-y: scroll;
+    }
+  </style>
+</html>

@@ -1,0 +1,86 @@
+---
+import RootLayout from "../layouts/root-layout.astro"
+import Link from "../components/link.astro"
+
+const SONGS = [
+  {
+    title: "vitalicio",
+    artist: "milo j",
+    thumbnail: "https://lh3.googleusercontent.com/yMSUiCAUsfY1CojVyJNO37U4Y4KI0Iboi6hWpt61q1UCb0nhxDLiRTlFRCND_bYz8f6HTl3ROSMYc60=w544-h544-l90-rj",
+    url: "https://music.youtube.com/watch?v=JE6hsBsH5Sg",
+  },
+  {
+    title: "afrolova'",
+    artist: "rels b",
+    thumbnail: "https://lh3.googleusercontent.com/07X6P2e_F9-Y4FWDa-vrcquIXq-3IvpksyB9-Jpm2ARg8nU4mOUFXs3c9eQiU6ATxCAXOSoA0hgeoIuOxw=w544-h544-l90-rj",
+    url: "https://music.youtube.com/watch?v=qw84n6JSIeE",
+  },
+  {
+    title: "mañana será otro día",
+    artist: "canserbero",
+    thumbnail: "https://lh3.googleusercontent.com/-Y9zzd0aHTC3JLPDpU0D1E08mhXt3-5sq0OLLx_nrmAnqcNJR0anEnaZ6UdvTf_9_8gs5RWcjlbvEPg2=w544-h544-l90-rj",
+    url: "https://music.youtube.com/watch?v=uHEF0dI7nLY",
+  },
+  {
+    title: "la canción feliz del disco",
+    artist: "eladio carrión ft. milo j",
+    thumbnail: "https://lh3.googleusercontent.com/cRJIB9OLfXlNPdOf_Yvuo87fFbk1Dtq0ngdkiXGjPmMhn_w1W0eVTeVSfmd8EgNNU-FsjEmnPvZ_8Xs06Q=w544-h544-l90-rj",
+    url: "https://music.youtube.com/watch?v=pmZKzJhhLik",
+  },
+  {
+    title: "santo grial",
+    artist: "dano ft. mir nicolás y duki",
+    thumbnail:
+    "https://lh3.googleusercontent.com/7Y9Im1Lniov6oMJwwFIwD-u2PU1sXIjJE3Wgr_uIS_wLnTv3fmvXyr1EOkA6MW3VI8oEMlgSMETfMIh_=w544-h544-l90-rj",
+    url: "https://music.youtube.com/watch?v=ZclzN7R_mmE",
+  },
+  {
+    title: "el patio",
+    artist: "pepe: vizio ft. delaossa",
+    thumbnail:
+    "https://lh3.googleusercontent.com/tCLueOsyO8-xAsYD9qONaqTxTo-2Lauq1ceTSYenXzGqG9BBYdogs2KSCW7mjJXrgJxLo8vZCK0jadcH=w544-h544-l90-rj",
+    url: "https://music.youtube.com/watch?v=568szakJe0M",
+  },
+  {
+    title: "outro",
+    artist: "kase.o",
+    thumbnail: "https://lh3.googleusercontent.com/ihn_5cVpHPhl0iXZiXFa9JOV42w2JYxE1UshoPtTsjLRe0rBuN3kjPCVlCXyoVTR3tmcqpsExtfbuanOuQ=w544-h544-l90-rj",
+    url: "https://music.youtube.com/watch?v=VD8cHCDTnN4",
+  },
+]
+---
+
+<RootLayout
+  title="music"
+  description="some tunes i've been vibing with lately"
+>
+  <section class="py-6">
+    <h2 class="pb-2 text-lg font-bold text-stone-200">music</h2>
+    <p>
+      some tunes i've been vibing with lately
+    </p>
+
+    <ul class="flex flex-col gap-4 pt-8">
+      {SONGS.map((song) => (
+        <li class="flex gap-8">
+          <img 
+            src={song.thumbnail} 
+            alt={song.title} 
+            class="object-cover w-20 aspect-square" 
+          />
+          <div class="flex flex-col gap-2 mt-2">
+            <Link 
+              href={song.url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              bold
+            >
+              {song.title}
+            </Link>
+            <p class="text-xs text-stone-400">{song.artist}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+</RootLayout>

@@ -1,0 +1,39 @@
+---
+import Link from "./link.astro"
+
+const SITE_LINKS = [
+  {
+    name: "blog",
+    url: "/blog",
+  },
+  {
+    name: "about",
+    url: "/about",
+  },
+  {
+    name: "music",
+    url: "/music",
+  },
+]
+---
+
+<header class="flex justify-between pb-4 text-sm text-stone-400">
+  <a href="/">
+    <h1>marioph ✨</h1>
+  </a>
+
+  <nav>
+    <ul class="flex gap-2.5">
+      {SITE_LINKS.map((link, index) => (
+        <>
+          <li>
+            <Link href={link.url}>
+              {link.name}
+            </Link>
+          </li>
+          {index < SITE_LINKS.length - 1 && <span>/</span>}
+        </>
+      ))}
+   </ul>
+  </nav>
+</header>

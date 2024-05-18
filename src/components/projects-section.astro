@@ -1,0 +1,48 @@
+---
+import Link from "./link.astro"
+
+const PROJECTS = [
+  {
+    title: "boble",
+    description: "real-time web chat.",
+    link: "",
+  },
+  {
+    title: "arbicuir",
+    description: "corporate website for a leather engraving company.",
+    link: "",
+  },
+  {
+    title: "barbería HB",
+    description: "website for a local barbershop.",
+    link: "",
+  },
+]
+---
+
+<section class="py-6">
+  <h2 class="pb-2 text-lg font-bold text-stone-200">projects</h2>
+
+  <ul class="flex flex-col gap-2 pb-4 text-sm">
+    {PROJECTS.map((project) => (
+      <li>
+        <Link 
+          href={project.link}
+          bold
+        >
+          {project.title}
+        </Link>
+        <p>{project.description}</p>
+      </li>
+    ))}
+  </ul>
+
+  <Link 
+    href="https://github.com/marioperezhurtado" 
+    target="_blank"
+    rel="noopener noreferrer"
+    arrow
+  >
+    more projects 
+  </Link>
+</section>
