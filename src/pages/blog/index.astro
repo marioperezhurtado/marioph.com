@@ -1,5 +1,12 @@
 ---
-import RootLayout from "../../layouts/root-layout.astro"
+import RootLayout from "../../layout/root-layout.astro"
+import Link from "../../components/link.astro"
+import FormattedDate from "../../components/formatted-date.astro"
+import { getCollection } from "astro:content"
+
+const blogPosts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+)
 ---
 
 <RootLayout
@@ -12,4 +19,20 @@ import RootLayout from "../../layouts/root-layout.astro"
       sometimes i write about stuff i find interesting.
     </p>
   </section>
+
+  <ul>
+    {blogPosts.map((post) => (
+      <li class="py-2 text-sm">
+        <Link
+          href={`/blog/${post.slug}`}
+          bold
+          heading
+        >
+          {post.data.title}
+        </Link>
+        <p class="pt-2 pb-1">{post.data.description}</p>
+        <FormattedDate date={post.data.pubDate} />
+      </li>
+    ))}
+  </ul>
 </RootLayout>

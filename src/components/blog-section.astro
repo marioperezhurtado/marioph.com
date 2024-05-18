@@ -1,47 +1,28 @@
 ---
 import Link from "./link.astro"
+import FormattedDate from "./formatted-date.astro"
+import { getCollection } from "astro:content"
 
-const BLOG_POSTS = [
-  {
-    title: "signals are everywhere",
-    date: "2023-10-02",
-    description: "my first blog post",
-    url: "/blog/signals-are-everywhere",
-  },
-  {
-    title: "progressively enhance your web applications",
-    date: "2023-09-10",
-    description: "my first blog post",
-    url: "/blog/progressively-enhance-your-web-applications",
-  },
-  {
-    title: "but why tailwind, though?",
-    date: "2023-08-20",
-    description: "my first blog post",
-    url: "/blog/but-why-tailwind-though",
-  },
-  {
-    title: "rust is really cool",
-    date: "2023-07-30",
-    description: "my first blog post",
-    url: "/blog/rust-is-really-cool",
-  },
-]
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+)
+
+const latestPosts = posts.slice(0, 3)
 ---
 
 <section class="py-6">
   <h2 class="pb-2 text-lg font-bold text-stone-200">blog</h2>
 
   <ul class="flex flex-col gap-2 pb-4 text-sm">
-    {BLOG_POSTS.map((post) => (
+    {latestPosts.map((post) => (
       <li class="flex gap-4 justify-between">
         <Link 
-          href={post.url}
+          href={`blog/${post.slug}`}
           bold
         >
-          {post.title}
+          {post.data.title}
         </Link>
-        <span class="text-stone-400 text-nowrap">{post.date}</span>
+        <FormattedDate date={post.data.pubDate} />
       </li>
     ))}
   </ul>

@@ -1,5 +1,5 @@
 ---
-import RootLayout from "../layouts/root-layout.astro"
+import RootLayout from "../layout/root-layout.astro"
 import Link from "../components/link.astro"
 
 const SONGS = [
@@ -66,7 +66,7 @@ const SONGS = [
           <img 
             src={song.thumbnail} 
             alt={song.title} 
-            class="object-cover w-20 aspect-square" 
+            class="object-cover w-20 h-20 bg-stone-700 aspect-square" 
           />
           <div class="flex flex-col gap-2 mt-2">
             <Link 

@@ -1,0 +1,314 @@
+---
+title: 'progressively enhance your web applications'
+description: 'make your web applications more resilient and accesible with
+progressive enhancement.'
+pubDate: 'sep 10 2023'
+image: 'progressive-enhancement.webp'
+---
+
+## What is Progressive Enhancement?
+
+Progressive enhancement is a web development technique that focuses on using the
+**web platform**'s core features to build resilient and accessible web applications, and then *progressively enhance* the experience by adding feedback, animations, and other client-side features.
+
+Do you recall how the native `form` element works? When you submit a form, the browser will send a request to the server, and the server will respond with a new HTML page.
+
+```html title="index.html" showLineNumbers
+<form>
+  <input type="email" name="email" />
+  <input type="password" name="password" />
+  <button type="submit">Login</button>
+</form>
+```
+
+Yes, the browser already knows how to send data to the server and render the new
+page. If you are using any modern JavaScript framework, you probably forgot **how
+forms work**.
+
+With modern JavaScript frameworks, sometimes we intercept the form submission, prevent the browser's default behaviour, and use the `fetch` API to send the form data to the server. Then, we use the response to update the DOM using JavaScript.
+
+```tsx showLineNumbers title="Todos.tsx" /preventDefault()/ /onSubmit/ 
+export default function Todos() {
+  function handleCreateTodo(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+
+    try {
+      const res = await fetch('/api/todo', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      // Do something with the data
+    } catch (error) {
+      // Handle error
+    }
+  }
+
+  return (
+    <form onSubmit={handleCreateTodo}>
+      <input type="text" name="title" />
+      <button type="submit">Add Todo</button>
+    </form>
+  );
+}
+```
+
+**We are not taking advantage of the web platform**. If the user doesn't have
+JavaScript – and there are many reasons why they might not (*we'll get to that
+later*) – then he would not be able to use our application.
+
+If your website is a single-page application, and it is not being server-side rendered, that user will not be able to see the content of your website.
+
+That's why *progressive enhancement* matters. The very basic functionality of your website **should be available** to everyone, regardless of their device, browser, or internet connection.
+
+This users will not have the best experience, but at least they will be able to
+*use your website*.
+
+And then, using JavaScript, we can *enhance* the experience for the rest of the
+users, providing them with a more interactive and engaging experience.
+
+But why is this important? Everyone has JavaScript, right?
+
+
+## But Everyone Has JavaScript, Right?
+
+Well, [not really](https://www.kryogenix.org/code/browser/everyonehasjs.html). There are many reasons why a user might not have JavaScript.
+
+- All your users are non-JS while they're downloading your JS.
+
+- If your users are on a train and their net connection goes away before your
+  JavaScript loads, then there's no JavaScript.
+
+- Some corporate firewalls block JavaScript.
+
+- Some ISPs or mobile operators interfere with JavaScript, and if you've never
+  experienced this before, drive to an airport and use their WiFi.
+
+- Microbrowsers are everywhere, and they won't wait for your client app to boot up.
+
+- Some users have JavaScript disabled.
+
+- There are thousands of browser extensions that might interfere with your
+  JavaScript.
+
+- Your CDN might be down, making your whole app unusable.
+
+- Some users have a browser that doesn't support JavaScript.
+
+- Some users have a slow connection.
+
+
+This concept of *progressive enhancement* it's actually how the web was meant to work, and you might be using it without even knowing it.
+
+
+## You Are Already Using Progressive Enhancement
+
+If you are using any JavaScript framework like [Next](https://nextjs.org/),
+[Remix](https://remix.run/) or [Nuxt](https://nuxt.com/), you are already using *progressive enhancement*.
+
+Components like Next's or Remix's `<Link>` will work like a regular `<a>`
+element while JavaScript is not loaded, and will be enhanced when JavaScript is
+loaded.
+
+- While there is no JavaScript, it works just like a regular link, triggering a full
+page reload to show the new HTML page.
+
+- But then, when JavaScript loads, this component will intercept the click event, fetch the new page, update the DOM, and change the URL without refreshing the page.
+
+That is a great example of *progressive enhancement*. The **basic
+functionality** is available to everyone, and then it is *enhanced* with
+JavaScript. In this case, this *"enhancement"* is navigating without a page
+refresh, preserving client state, prefetching, etc.
+
+You might think this is a rare case, that only a few users will notice. Is it really worth the effort?
+
+
+## Progressive Enhancement And Accessibility
+
+We should think about *progressive enhancement* similarly to how we think about *accessibility*.
+
+Building products that provide **value** is the top priority, and if something doesn't, since it only affects a small percentage of users, spending time and effort on it is not worth it.
+ 
+But what if we had libraries and tools that help us make our sites accessible without
+much effort? Why wouldn't we use them?
+
+Libraries like [Radix UI](https://www.radix-ui.com/) or [Headless
+UI](https://headlessui.com/) help us build fully accessible web apps without the hassle.
+
+```tsx showLineNumbers title="MyAccessibleDropdown.tsx"
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+
+export default function MyAccessibleDropdown() {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <Button variant="soft">
+          Options
+          <CaretDownIcon />
+        </Button>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item shortcut="⌘ E">Edit</DropdownMenu.Item>
+        <DropdownMenu.Item shortcut="⌘ D">Duplicate</DropdownMenu.Item>
+        <DropdownMenu.Separator />
+
+        <DropdownMenu.Sub>
+          <DropdownMenu.SubTrigger>More</DropdownMenu.SubTrigger>
+          <DropdownMenu.SubContent>
+            <DropdownMenu.Item>Move to project…</DropdownMenu.Item>
+            <DropdownMenu.Item>Move to folder…</DropdownMenu.Item>
+          </DropdownMenu.SubContent>
+        </DropdownMenu.Sub>
+
+        <DropdownMenu.Separator />
+        <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
+          Delete
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  )
+}
+```
+
+This same concept can be translated to *progressive enhancement*. If a framework
+gives us **good defaults**, and builds on top of the **web platform**, we can improve the resilience and availability of our applications, without having to change the way we develop.
+
+Let's see an example of how we can achieve this.
+
+
+## A Real World Example
+
+In this example I will be using [SvelteKit](https://kit.svelte.dev/), but there
+are lots of other frameworks that share similar patterns, like [Remix](https://remix.run).
+
+```svelte showLineNumbers title="Todos.svelte" /create/
+<form method="POST" action="?/create">
+	<label>
+    Title:
+		<input
+			name="title"
+			autocomplete="off"
+			required
+		/>
+	</label>
+  <button type="submit">Create Todo</button>
+</form>
+```
+
+This is just a regular form. When the user submits the form, the browser will
+send a request to the server, and the server will respond with a new HTML page.
+
+We have a server `action` that will handle the form submission. Don't worry
+about the details of this function, just note that it will create a new todo in
+the database.
+
+```ts showLineNumbers title="+page.server.ts" /create:/
+import type { Actions } from './$types';
+
+export const actions = {
+  create: async ({ request }) => {
+    const data = await request.formData();
+
+    try {
+      db.todos.create(data.get('title'));
+    } catch (error) {
+      return {
+        status: 400,
+        body: { error: error.message },
+      };
+    }
+  }
+} satisfies Actions;
+```
+
+Our app works even if the user doesn't have JavaScript. That's great, because
+it means our app is **resilient** and available to everyone.
+
+Now, we can *progressively enhance* the experience by adding some client-side
+interactivity. In this case, we will use SvelteKit's `use:enhance` directive,
+which will emulate the browser-native behaviour, but without the full-page
+reload. It will:
+
+- Update the `form` prop.
+
+- Invalidate all data on a successful response, causing `load` functions to
+  re-run.
+
+- Navigate to the new page on a redirect response.
+
+- Render the nearest error page if an error occurs.
+
+And we can add stuff like **pending states**, **animations**, and **optimistic
+UI**.
+
+```svelte showLineNumbers title="Todos.svelte" {2,3,8,14-21,26,35-37}
+<script lang="ts">
+  import { fly, slide } from 'svelte/transition';
+  import { enhance } from '$app/forms';
+  import type { PageData } from './$types';
+
+  export let data: PageData;
+
+  let creating = false;
+</script>
+
+<form 
+  method="POST"
+  action="?/create"
+  use:enhance={() => {
+    creating = true;
+
+    return async ({ update }) => {
+      await update();
+      creating = false;
+    };
+  }}
+>
+	<label>
+    Title:
+		<input
+      disabled={creating}
+			name="title"
+			autocomplete="off"
+			required
+		/>
+	</label>
+  <button type="submit">Create Todo</button>
+</form>
+
+{#if creating}
+  <p>Creating todo...</p>
+{/if}
+
+<ul>
+  {#each data.todos as todo (todo.id)}
+    <li in:fly={{ y: 20 }} out:slide>
+      {todo.title}
+    </li>
+  {/each}
+</ul>
+```
+
+Our app now is fully **interactive**, but it still works without JavaScript – it
+is progressively enhanced –. And we didn't need to implement any complex logic
+to make this work. We just used the web platform's core features, paired with a
+nice framework, to build a resilient and accessible web application.
+
+
+## Conclusion
+
+This fancy term of *progressive enhancement* is not new, it's just how the web was
+meant to work. We should take advantage of the web platform and build on top of it, with the help of frameworks and libraries that give us the right tools to do so.
+
+
+## Other Resources
+
+- [Everyone Has JavaScript,
+Right?](https://www.kryogenix.org/code/browser/everyonehasjs.html)
+- [Progressive Enhancement
+MDN](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement)
+- [SvelteKit Interactive Tutorial](https://learn.svelte.dev/tutorial/progressive-enhancement)
+- [Remix Progressive
+  Enhancement](https://remix.run/docs/en/main/pages/philosophy#progressive-enhancement)

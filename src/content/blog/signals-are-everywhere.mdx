@@ -1,0 +1,589 @@
+---
+title: 'signals are everywhere'
+description: "learn about signals by implementing a simple reactive library."
+pubDate: 'oct 2 2023'
+image: 'signals-are-everywhere.webp'
+---
+
+[vue](https://vuejs.org/), [preact](https://preactjs.com/),
+[solid](https://www.solidjs.com/), [qwik](https://qwik.builder.io/),
+[angular](https://angular.io/) and now [svelte](https://svelte.dev/). it seems
+like every front-end framework is getting signals. what are they?
+
+in this post, we'll learn about **signals** by implementing a simple
+*signal-based* reactive library.
+
+## history of signals
+
+signal-based reactivity is not a new concept. the foundations of [reactive
+programming](https://en.wikipedia.org/wiki/Reactive_programming) were
+laid in the 1970s with the development of electronic spreadsheets and hardware
+description languages. also in our context, building **reactive UIs**, the use of signals – also known by various names – has been around for a while.
+
+in **2010**, [knockout.js](https://knockoutjs.com/) introduced *fine-grained*
+updates with the use of observables. in **2012**,
+[S.js](https://github.com/adamhaile/S) introduced its own primitive for reactive
+updates, called *signals*. other not-so-popular libraries have had their own signals all this time, but it wasn't until recently that they seem to be coming back into fashion.
+
+vue, solid, preact, qwik, and angular, have all introduced their own versions of
+signals. the [announcement](https://svelte.dev/blog/runes) of svelte 5 with their so-called *"runes"*, is what prompted me to write this article.
+
+
+## what are signals?
+
+signals represent a single value that changes over time. tt is an **atomic reactive
+primitive** that updates its value when its *dependencies* change.
+
+signals unlock **fine-grained** reactivity. the following examples will be using
+[solid.js](https://www.solidjs.com/), but the general concepts apply to any signal-based
+library.
+
+take the following example:
+
+```jsx title="counter.jsx"
+function Counter() {
+  const [count, setCount] = createSignal(0);
+  const increment = () => count(count() + 1);
+
+  console.log("I only log once");
+
+  return <button onClick={increment}>{count()}</button>;
+}
+```
+
+this looks pretty much like a [react](https://react.dev/) component, and if you
+are familiar with it, you might be wondering what is the difference. there are a few of them, for example:
+
+how many times would the message be logged to the console?
+
+**once**. the function **only ever runs once**, when the component is mounted. that makes
+simpler to reason about the component's behavior. for example, we can do this:
+
+```jsx title="counter.jsx" {5}
+function Counter() {
+  const [count, setCount] = createSignal(0);
+  const increment = () => setCount(count() + 1);
+
+  setInterval(increment, 1000);
+  console.log("I only log once");
+
+  return <button onClick={increment}>{count()}</button>;
+}
+```
+
+the `count` will be updated every second, and so will the `button`'s text, but
+only that will re-run. the console will still only log once. we have achieved **fine-grained reactivity**.
+
+here's another one. how would we change the count state to be global state in this example?
+
+```jsx title="counter.jsx" {1}
+const [count, setCount] = createSignal(0);
+
+function Counter() {...}
+```
+
+just move it out of the component. **state and component lifecycle are not tied together.** 
+
+how would we produce a *side effect* when the count changes?
+
+```jsx title="counter.jsx" {5-7}
+function Counter() {
+  const [count, setCount] = createSignal(0);
+  const increment = () => setCount(count() + 1);
+
+  createEffect(() => {
+    console.log('count changed', count());
+  });
+
+  return <button onClick={increment}>{count()}</button>;
+}
+```
+
+**no dependency arrays**. components **only ever run once**, so there is no need
+to specify dependencies. the *effect* will run every time the count changes, and only then.
+
+this might seem like some kind of *magic*, maybe a compiler trick, but **it
+is not**. the concept itself is fairly simple. let's build our own (naive) implementation of a *signal-based* library.
+
+
+## implementing a signal-based library
+
+the first thing we need is... *you guessed it*, our **signal**. a signal consists of a
+**getter**, a **setter** and a **value**. we'll follow Solid's convention and return them in a tuple.
+
+```js title="signals.js"
+function createSignal(value) {
+  const read = () => {
+    return value;
+  };
+  const write = (newValue) => {
+    value = newValue;
+  };
+
+  return [read, write];
+}
+```
+
+we need to keep track of the signal's **subscribers**. we'll use a `Set` for that.
+
+```js title="signals.js" {2}
+function createSignal(value) {
+  const subscribers = new Set();
+  // ...
+}
+```
+
+a global **stack** to keep track of the current *observer*.
+
+```js title="signals.js"
+const context = [];
+
+function getCurrentObserver() {
+  return context[context.length - 1];
+}
+```
+
+and our **effect** function, wich will push itself onto the *stack*, run the
+*callback*, and then pop itself off the *stack*.
+
+```js title="signals.js"
+function createEffect(callback) {
+  const effect = () => {
+    context.push(effect);
+    try {
+      callback();
+    } finally {
+      context.pop();
+    }
+  };
+
+  effect();
+}
+```
+
+in the signal's `read` function, we'll get the current observer and add it to the
+subscribers list.
+
+```js title="signals.js" {5-8}
+function createSignal(value) {
+  const subscribers = new Set();
+
+  const read = () => {
+    const observer = getCurrentObserver();
+    if (observer) {
+      subscribers.add(observer);
+    }
+    return value;
+  };
+
+  //...
+}
+```
+
+and in the `write` function, we'll also call every subscriber after the value is
+**updated**.
+
+```js title="signals.js" {14}
+function createSignal(value) {
+  const subscribers = new Set();
+
+  const read = () => {
+    const observer = getCurrentObserver();
+    if (observer) {
+      subscribers.add(observer);
+    }
+    return value;
+  };
+
+  const write = (newValue) => {
+    value = newValue;
+    subscribers.forEach((sub) => sub());
+  };
+
+  return [read, write];
+}
+```
+
+that's our very basic implementation of a **signal** and an **effect**.
+
+i will recap the code now:
+
+```js title="signals.js"
+const context = [];
+
+function getCurrentObserver() {
+  return context[context.length - 1];
+}
+
+function createSignal(value) {
+  const subscribers = new Set();
+
+  const read = () => {
+    // 5.
+    const observer = getCurrentObserver();
+    if (observer) {
+      subscribers.add(observer);
+    }
+    return value;
+  };
+
+  const write = (newValue) => {
+    // 7.
+    value = newValue;
+    subscribers.forEach((sub) => sub());
+  };
+
+  return [read, write];
+}
+
+function createEffect(callback) {
+  const effect = () => {
+    // 3.
+    context.push(effect);
+    try {
+      // 4.
+      callback();
+    } finally {
+      context.pop();
+    }
+  };
+
+  effect();
+}
+```
+
+let's explain, step by step, what would happen if we ran the following code:
+
+```js title="index.js"
+// 1.
+const [count, setCount] = createSignal(0);
+
+// 2, 8.
+createEffect(() => console.log('count changed', count()));
+
+// 6.
+setCount(count() + 1);
+```
+
+1. we create a **signal** with the value `0`.
+2. we create an **effect** with a callback that logs the count.
+3. the **effect** pushes itself onto the **stack** and runs its callback.
+4. while running the callback, the `count` function is called.
+5. because the `count` **read** function is called while there is an
+  **effect** running, the effect is now the latest observer, and it is added to
+  the subscribers list of the **signal**.
+6. when we call the `setCount` function, we call the **write** function of the
+  **signal**, which updates the value, then calls every subscriber.
+7. we have the **effect** callback in the **signal**'s subscribers list, so it is called.
+8. the **effect** callback logs the count, which is `1`.
+
+we have a **reactive system** working! We could manually create `HTML` elements and
+update their values using effects:
+
+```js title="index.js" /h1.textContent = count()/
+const [count, setCount] = createSignal(0);
+
+const h1 = document.createElement("h1");
+
+createEffect(() => h1.textContent = count());
+
+const button = document.createElement("button");
+button.textContent = "click me!";
+button.addEventListener("click", () => setCount(count() + 1));
+
+document.body.append(h1, button);
+```
+
+the basics of our **signal-based** reactive system are there. but now we could make it
+easier to use, so that we don't have to manually create elements and update their
+values imperatively, but declaratively, as many frameworks do. let's use
+**JSX**. our end result should look like this:
+
+```jsx title="counter.jsx"
+function Counter(props) {
+  const [count, setCount] = createSignal(props.initialCount);
+  const increment = () => setCount(count() + 1);
+  const decrement = () => setCount(count() - 1);
+
+  createEffect(() => console.log('count changed', count()));
+
+  return (
+    <section>
+      <h1>the count is: <span>{count()}</span></h1> 
+      <button onClick={decrement}>-</button>
+      <button onClick={increment}>+</button>
+    </section>
+  );
+}
+```
+
+doesn't that look *familiar*? i am sure it does.
+
+if you **only** wanted to know about what **signals** are, and how they work, you can
+stop reading here. the rest of the article will just explain how to implement **JSX** transpiling, so you can see how it works under the hood, and how we actually
+have achieved a (very) basic version of a **VDOM-less, signal-based UI
+library**. if that is not the case, let's continue.
+
+## using JSX
+
+JSX is a *syntax extension* to javascript that allows us to write **HTML-like** code
+in javascript. It is used by react, preact, solid, qwik, and many other libraries.
+
+fortunately, we have *transpilers* that can transform JSX into javascript, so we
+don't need to implement it ourselves. we'll use [babel](https://babeljs.io/) to
+transform our code.
+
+what happens under the hood when we use JSX in react?
+
+every *HTML-like* tag is transformed into a bunch of function calls. for example,
+the following JSX:
+
+```jsx title="hello-world.jsx"
+<div>
+  <h1>hello world</h1>
+</div>
+```
+
+Gets transformed into:
+
+```js title="bundle.js"
+React.createElement('div', null, React.createElement('h1', null, 'hello world'));
+```
+
+where the first argument is the **tag**, the second is the **props**, and the third 
+is the **children**. we'll just use the `@babel/plugin-transform-react-jsx` plugin to
+transform our code, and we'll implement our own `createElement` function.
+
+i will `npm init` a new project, and install the following dependencies:
+
+```sh
+npm install @babel/core @babel/cli @babel/plugin-transform-react-jsx
+```
+
+i've named this example library *“Junk”*, and I'm sure you know why. anyway, let's
+change the babel configuration, to use the `plugin-transform-react-jsx` with our
+custom `createElement` function:
+
+```json title="package.json" {22}
+{
+  "name": "junk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "babel index.jsx -d dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.23.0",
+    "@babel/core": "^7.23.0",
+    "@babel/plugin-transform-react-jsx": "^7.22.15"
+  },
+  "babel": {
+    "plugins": [
+      [
+        "@babel/plugin-transform-react-jsx",
+        {
+          "pragma": "Junk.createElement",
+          "pragmaFrag": "Junk.Fragment"
+        }
+      ]
+    ]
+  }
+}
+```
+
+now we need to implement the `createElement` function. it will receive the
+**tag**, the **props**, and the **children**, and it will return an element object.
+
+```js title="render.js"
+function createElement(tag, props, ...children) {
+  // Custom component
+  if (isFunction(tag)) {
+    return tag({ ...props, children });
+  }
+
+  // create DOM element with attributes
+  const element = addAttributes(document.createElement(tag), props);
+
+  // append children
+  children.flat().forEach((child) => {
+    const node = isTextNode(child) ? document.createTextNode(child) : child;
+
+    if (typeof child === 'function') {
+      createEffect(() => createExpression(element, child));
+    } else {
+      if (node) element.appendChild(node);
+    }
+  });
+
+  return element;
+}
+```
+
+the `addAttributes` function is just a helper to add the **attributes** to the
+element, like event listeners, class names, and other attributes.
+
+```js title="render.js"
+function addAttributes(element, props) {
+  if (!props) return element;
+
+  Object.entries(props).forEach(([k, v]) => {
+    // Add event listener
+    if (isEvent(k, v)) {
+      element.addEventListener(eventName(k), v);
+    } // Add class
+    else if (k === 'className') {
+      const classes = Array.isArray(v) ? v : [v];
+      classes.forEach((c) => element.classList.add(c));
+    } // Add attribute
+    else {
+      element.setAttribute(k, v);
+    }
+  });
+
+  return element;
+}
+```
+
+in the `createElement` function, if the child is a function, we create an
+**effect** that will run **only** when the expression changes (if it is a
+signal), and will update the element with the new value.
+
+```js title="render.js" {7-9}
+function createElement(tag, props, ...children) {
+  // ...
+  // Append children
+  children.flat().forEach((child) => {
+    const node = isTextNode(child) ? document.createTextNode(child) : child;
+
+    if (typeof child === "function") {
+      createEffect(() => createExpression(element, child));
+    }
+    // ...
+  });
+  //...
+}
+``` 
+
+the `createExpression` function changes the element's value. it is super
+**flawed**, and does not take into account important things, but it works for
+our basic toy example.
+
+```js title="render.js"
+function createExpression(element, expression) {
+  const result = expression();
+
+  if (isEmpty(result)) {
+    element.innerHtml = "";
+    return;
+  }
+                       
+  if (isTextNode(result)) {
+    element.textContent = result;
+    return;
+  }
+
+  element.innerHtml = "";
+  element.appendChild(result);
+}
+```
+
+now that we have this `createElement` function, we can use **JSX**, and it will be
+transformed in a bunch of calls to our function.
+
+we can implement a simple `render` helper to append the root element of our application
+to the entry point on the DOM:
+
+```js title="render.js"
+function render(element) {
+  document.getElementById('root').appendChild(element);
+}
+```
+
+and similarly to React (or any other SPA), the entry point of our application
+will be a div with the id `root`. our JS code will simply be loaded in our
+`index.html` file. It will load, create the elements, and append the root element to the DOM.
+
+```html title="index.html" {8}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Junk</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <script src="./dist/index.js"></script>
+  </body>
+</html>
+```
+
+our basic UI library now looks like this:
+
+```jsx title="index.jsx"
+import { createSignal, createEffect } from "/signals.js";
+import { Junk } from "/render.js";
+
+function Counter(props) {
+  const [count, setCount] = createSignal(props.initialCount);
+  const increment = () => setCount(count() + 1);
+  const decrement = () => setCount(count() - 1);
+
+  createEffect(() => console.log('count: ', props.count() * 2)});
+
+  return (
+    <section>
+      <h1>The count is: <span>{count()}</span></h1> 
+      <Double count={count}/>
+      <button onClick={decrement}>-</button>
+      <button onClick={increment}>+</button>
+    </section>
+  );
+}
+
+function Double(props) {
+  createEffect(() => console.log('double: ', props.count() * 2)});
+
+  return <span>{props.count() * 2}</span>;
+}
+
+function App() {
+  return (
+    <>
+      <h1>hello world!</h1>
+      <Counter initialCount={0} />
+    </>
+  );
+}
+
+Junk.render(<App/>);
+```
+
+## conclusion
+
+that's it! we have a working **signal-based library**, and although it is clearly
+flawed and incomplete, i think it is a good example to learn about **signals**,
+**reactivity**, **JSX**, and how some of these things work (at a basic level)
+under the hood, in a practical way.
+
+signals are a really interesting concept that i am really excited about, and i
+will keep learning more about this topic. i hope you enjoyed this article, learned something new, and most importantly, **had fun!**
+
+you can find the code for this example
+[here](https://github.com/marioperezhurtado/junk).
+
+## other resources
+
+this article is **heavily** inspired by the great work of [ryan
+carniato](https://twitter.com/RyanCarniato) and the [solid](https://www.solidjs.com/)
+team. i also recommend you to check out the following resources:
+
+- [revolutionary signals](https://youtu.be/Jp7QBjY5K34)
+- [why are people so obsessed with useSignal()?](https://youtu.be/lXDDNM5rZQI)
+- [the world beyond components](https://youtu.be/O6xtMrDEhcE)
+

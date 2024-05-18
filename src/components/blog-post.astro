@@ -1,0 +1,128 @@
+---
+import RootLayout from "../layout/root-layout.astro";
+import Link from "./link.astro";
+import FormatedDate from "../components/formatted-date.astro";
+import ReadingProgress from "../components/reading-progress.astro";
+
+import type { CollectionEntry } from "astro:content";
+type Props = CollectionEntry<"blog">["data"];
+
+const { title, description, pubDate } = Astro.props;
+---
+
+<RootLayout
+  title={`${title} • Mario Pérez Hurtado`}
+  description={description}
+>
+  <ReadingProgress />
+  <main class="my-10">
+    <article class="mx-auto max-w-prose">
+      <Link href="/blog">← back </Link>
+      <h1 class="pt-6 text-lg font-bold">
+        # {title}
+      </h1>
+      <FormatedDate date={pubDate} />
+
+      <hr class="mt-4 mb-8 h-px border-0 bg-stone-400" />
+      <div id="blog">
+        <slot />
+      </div>
+    </article>
+  </main>
+
+  <style is:inline>
+    #blog span[data-line] {
+      padding: 0 0.5rem;
+      border-left: 4px solid transparent;
+    }
+    #blog div[data-rehype-pretty-code-fragment] {
+      margin: 1rem 0 3rem;
+    }
+    #blog span[data-highlighted-line] {
+      background-color: #134e4a;
+      border-left: 4px solid #14b8a6;
+    }
+    #blog mark[data-highlighted-chars] {
+      background-color: transparent;
+      border-bottom: 2px solid #14b8a6;
+    }
+    #blog p {
+      line-height: 1.5;
+      padding-bottom: 1rem;
+    }
+    #blog strong {
+      color: #e7e5e4;
+    }
+    #blog h2 {
+      color: #e7e5e4;
+      font-size: 18px;
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+      font-weight: bold;
+      padding: 1.5rem 0 0.5rem;
+    }
+    #blog pre {
+      padding: 0.8rem 0;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+        0 2px 4px -2px rgb(0 0 0 / 0.1);
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+    #blog pre > code {
+      all: unset;
+      font-size: 14px;
+    }
+    #blog figcaption {
+      font-size: 0.75rem;
+      line-height: 1rem;
+      margin-bottom: 0.3rem;
+    }
+    #blog code {
+      background-color: #393b4e;
+      padding: 0.1rem 0.3rem;
+      font-size: 14px;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+        0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+    #blog blockquote {
+      margin: 1rem 0 2rem;
+      padding: 1rem;
+      font-size: 15px;
+      border-left: 4px solid #4b4e69;
+      background-color: #393b4e;
+      color: #fff;
+      font-style: italic;
+    }
+    #blog blockquote p {
+      padding: 0;
+    }
+    #blog a {
+      color: #d6d3d1;
+      font-weight: bold;
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      text-decoration-color: #a8a29e;
+      text-underline-offset: 4px;
+      transition: all 300ms;
+    }
+    #blog a:hover {
+      text-decoration-color: #e7e5e4;
+    }
+    #blog ul,
+    #blog ol {
+      padding-left: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    #blog ul {
+      list-style: disc;
+    }
+    #blog ol {
+      list-style: decimal;
+    }
+    img {
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      margin: 1rem 0;
+      max-height: 400px;
+    }
+  </style>
+</RootLayout>
