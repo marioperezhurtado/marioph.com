@@ -1,23 +1,22 @@
 ---
 title: 'rust is really cool'
-description: "a brief introduction to Rust's most interesting language features.
+description: "a brief introduction to rust's most interesting language features.
 inmutability, pattern matching, error handling, null references, and more."
-pubDate: 'Jul 07 2023'
-image: 'rust-is-really-cool.webp'
+pubDate: 'jul 07 2023'
 ---
 
-As a web developer, mainly using TypeScript, I wanted to explore a completely different language, stepping out of my comfort zone and exploring new ways of doing things.
+as a web developer, mainly using typescript, i wanted to explore a completely different language, stepping out of my comfort zone and exploring new ways of doing things.
 
-Rust’s selling point for a large group of people is its performance, but I was particularly interested in its _error handling_ and _functional language_ features.
+rust’s selling point for a large group of people is its performance, but i was particularly interested in its _error handling_ and _functional language_ features.
 
-I am far from being an expert in Rust, but I would like to share the topics that have caught my interest the most, changing my perspective on software development.
+i am far from being an expert in rust, but i would like to share the topics that have caught my interest the most, changing my perspective on software development.
 
+## immutability by default
 
-## Immutability By Default
+in rust, variables are immutable by default. to declare a variable as mutable,
+you must use the `mut` keyword. functions also need to declare if they intend to mutate their arguments.
 
-In Rust, variables are immutable by default. To declare a variable as mutable, you must use the `mut` keyword. Functions also need to declare if they intend to mutate their arguments.
-
-We must be **explicit** about whether we are going to change the value of any variable, making our code more robust, predictable, and easier to reason about.
+we must be **explicit** about whether we are going to change the value of any variable, making our code more robust, predictable, and easier to reason about.
 
 ```rust showLineNumbers title="main.rs" /mut bar/ /mut buzz/
 let foo = 5;
@@ -33,9 +32,9 @@ fizz.push(10)  // ✗
 buzz.push(20)  // ✔
 ```
 
-## Pattern Matching
+## pattern matching
 
-Rust's _pattern matching_ syntax is a powerful tool for handling complex data types and writing robust and expressive code.
+rust's _pattern matching_ syntax is a powerful tool for handling complex data types and writing robust and expressive code.
 
 ```rust showLineNumbers title="message.rs"
 enum Message {
@@ -46,7 +45,8 @@ enum Message {
 }
 ```
 
-The `match` statement allow us to compare a value against a series of _patterns_ and then execute code based on which pattern matches. We can represent all the possible states of our application and safely handle every scenario in a concise and expressive way.
+the `match` statement allow us to compare a value against a series of _patterns_
+and then execute code based on which pattern matches. we can represent all the possible states of our application and safely handle every scenario in a concise and expressive way.
 
 ```rust showLineNumbers title="message.rs"
 fn handle_message(msg: Message) {
@@ -59,13 +59,14 @@ fn handle_message(msg: Message) {
 }
 ```
 
-Pattern matching is **exhaustive**, which means we must handle all possible cases, eliminating the risk of missing critical scenarios and potential bugs. Otherwise, the program would not compile.
+pattern matching is **exhaustive**, which means we must handle all possible
+cases, eliminating the risk of missing critical scenarios and potential bugs. otherwise, the program would not compile.
 
-## Error Handling Done Right
+## error handling done right
 
-Rust treats errors as values. Instead of _throwing_ and error and hoping that some function above will _catch_ it, if your code can produce an error, the compiler requires you to handle it or explicitly pass it to the next function.
+rust treats errors as values. instead of _throwing_ and error and hoping that some function above will _catch_ it, if your code can produce an error, the compiler requires you to handle it or explicitly pass it to the next function.
 
-`Result` is an `enum` which value can be either `Ok` or `Err`. Each variant represents the success or failure of the operation, with its resulting value.
+`Result` is an `enum` which value can be either `Ok` or `Err`. each variant represents the success or failure of the operation, with its resulting value.
 
 ```rust showLineNumbers title="src/core/lib.rs"
 enum Result<T, E> {
@@ -74,7 +75,8 @@ enum Result<T, E> {
 }
 ```
 
-Consider this code that reads from a text file. The `read_to_string` function has a return type of `Result`. That indicates that the code might contain an error, thus forcing to handle it before using the result.
+consider this code that reads from a text file. the `read_to_string` function
+has a return type of `Result`. that indicates that the code might contain an error, thus forcing to handle it before using the result.
 
 ```rust showLineNumbers title="read_file.rs"
 use std::fs;
@@ -89,7 +91,7 @@ fn read_from_file(path: &str) {
 }
 ```
 
-If we do not want to handle it now, we must modify the function signature to indicate that the result of this function could potentially be an error.
+if we do not want to handle it now, we must modify the function signature to indicate that the result of this function could potentially be an error.
 
 ```rust showLineNumbers title="read_file.rs" /Result<String, Error>/
 use std::fs;
@@ -100,7 +102,7 @@ fn read_from_file(path: &str) -> Result<String, Error> {
 }
 ```
 
-By combining _errors as values_ with `enums` and pattern matching, Rust ensures that we correctly handle all possible errors in our code.
+by combining _errors as values_ with `enums` and pattern matching, rust ensures that we correctly handle all possible errors in our code.
 
 ```rust showLineNumbers title="read_file.rs"
 match error.kind() {
@@ -110,10 +112,10 @@ match error.kind() {
 }
 ```
 
-Comparing it to TypeScript, we can see the strength and correctness of the
+comparing it to typescript, we can see the strength and correctness of the
 former solution.
 
-In TypeScript, errors are thrown without any built-in mechanism to ensure that all error scenarios are properly handled or even if they will be handled at all.
+in typescript, errors are thrown without any built-in mechanism to ensure that all error scenarios are properly handled or even if they will be handled at all.
 
 ```typescript showLineNumbers title="error_handling.ts" /err: ???/
 try {
@@ -127,21 +129,27 @@ try {
 // who is responsible for handling the error?
 ```
 
-There are a few [libraries](https://github.com/vultix/ts-results) that try to
-solve this exact problem in TypeScript, but they are not part of the language
+there are a few [libraries](https://github.com/vultix/ts-results) that try to
+solve this exact problem in typescript, but they are not part of the language
 itself, and they have performance implications, limitations and other caveats.
 
-## Null References: The Billion Dollar Mistake
+## null references: the billion dollar mistake
 
-The problem with _null values_ is that if you try to use a null value as a not-null value, you will get an error of some kind. Because this null or not-null property is pervasive, it’s extremely easy to make this kind of error.
+the problem with _null values_ is that if you try to use a null value as a
+not-null value, you will get an error of some kind. because this null or not-null property is pervasive, it’s extremely easy to make this kind of error.
 
-In his 2009 presentation “Null References: The Billion Dollar Mistake,” Tony Hoare, the inventor of null, has this to say:
+in his 2009 presentation “null references: the billion dollar mistake,” tony hoare, the inventor of null, has this to say:
 
-> I call it my billion-dollar mistake. At that time, I was designing the first comprehensive type system for references in an object-oriented language. My goal was to ensure that all use of references should be absolutely safe, with checking performed automatically by the compiler. But I couldn’t resist the temptation to put in a null reference, simply because it was so easy to implement. This has led to innumerable errors, vulnerabilities, and system crashes, which have probably caused a billion dollars of pain and damage in the last forty years. - Tony Hoare
+> i call it my billion-dollar mistake. at that time, i was designing the first
+> comprehensive type system for references in an object-oriented language. my
+> goal was to ensure that all use of references should be absolutely safe, with
+> checking performed automatically by the compiler. but i couldn’t resist the temptation to put in a null reference, simply because it was so easy to implement. this has led to innumerable errors, vulnerabilities, and system crashes, which have probably caused a billion dollars of pain and damage in the last forty years. - Tony Hoare
 
-The problem isn’t really with the concept of null values, but with the particular implementation. As such, Rust does not have nulls, but it does have an `enum` that can encode the concept of a value being present or absent.
+the problem isn’t really with the concept of null values, but with the
+particular implementation. as such, rust does not have nulls, but it does have an `enum` that can encode the concept of a value being present or absent.
 
-`Option` is an `enum` that encodes the very common scenario in which a value could be something or it could be nothing. A `Option` type can be either `Some`, with a value, or `None`, that represents the absence of a value.
+`Option` is an `enum` that encodes the very common scenario in which a value
+could be something or it could be nothing. an `Option` type can be either `Some`, with a value, or `None`, that represents the absence of a value.
 
 ```rust showLineNumbers title="src/core/lib.rs"
 enum Option<T> {
@@ -150,7 +158,8 @@ enum Option<T> {
 }
 ```
 
-The Rust compiler ensures that you convert an `Option<T>` to a `T` before you can perform `T` operations with it. Generally, this helps catch one of the most common issues with null: assuming that something isn’t null when it actually is.
+the rust compiler ensures that you convert an `Option<T>` to a `T` before you
+can perform `T` operations with it. generally, this helps catch one of the most common issues with null: assuming that something isn’t null when it actually is.
 
 ```rust showLineNumbers title="find_haystack.rs" /Option<usize>/
 fn find(haystack: &str, needle: char) -> Option<usize> {
@@ -171,11 +180,12 @@ fn main() {
 }
 ```
 
-## Rust Compiler Teaches You
+## rust compiler teaches you
 
-Learning Rust can be quite challenging. Understanding concepts such as the _ownership model, string types, generics, traits, lifetimes, macros_, and complying with the strict and authoritative rules of the language, can be overwhelming. However, one thing that made my learning journey easier was to learn from the compiler errors.
+learning rust can be quite challenging. understanding concepts such as the _ownership model, string types, generics, traits, lifetimes, macros_, and complying with the strict and authoritative rules of the language, can be overwhelming. however, one thing that made my learning journey easier was to learn from the compiler errors.
 
-Initially, you may make several fundamental mistakes because you do not yet understand how Rust works. The compiler is very strict, but it is also extremely useful, showing precisely where the error occurred, the probable solution to it, and a brief explanation along with the corresponding error code.
+initially, you may make several fundamental mistakes because you do not yet
+understand how rust works. the compiler is very strict, but it is also extremely useful, showing precisely where the error occurred, the probable solution to it, and a brief explanation along with the corresponding error code.
 
 ```txt
 $ cargo run
@@ -196,18 +206,23 @@ For more information about this error, try `rustc --explain E0502`.
 error: could not compile `ownership` due to previous error
 ```
 
-## Conclusion
+## conclusion
 
-Rust is _unfamiliar_, and can be tough to learn, but it's worth the effort. It is a strict language with a steep learning curve; however, this design choice helps developers understand its complexity early on and avoid bugs in the future. Keep this in mind before starting to learn Rust.
+rust is _unfamiliar_, and can be tough to learn, but it's worth the effort. it
+is a strict language with a steep learning curve; however, this design choice
+helps developers understand its complexity early on and avoid bugs in the
+future. keep this in mind before starting to learn rust.
 
-Rust is a robust, elegant, and powerful language. Although I will probably not use it at work, I have found it a very enjoyable language to learn, despite being quite challenging. It has changed my view on software development and how things can be done, and most importantly, it has been **really fun**.🦀
+rust is a robust, elegant, and powerful language. although i will probably not
+use it at work, i have found it a very enjoyable language to learn, despite
+being quite challenging. it has changed my view on software development and how things can be done, and most importantly, it has been **really fun**.🦀
 
-## Other Resources
+## other resources
 
-Most of the code examples are taken from the Rust Book, and other cool resources.
+most of the code examples are taken from the rust book, and other cool resources.
 
-- [The Rust Programming Language](https://doc.rust-lang.org/book/)
-- [How to Learn Rust](https://www.youtube.com/watch?v=2hXNd6x9sZs&ab_channel=NoBoilerplate)
-- [Rust Enums Are Better](https://www.youtube.com/watch?v=Epwlk4B90vk&ab_channel=ThePrimeagen)
-- [Rust: Not Just Zoom Zoom Fast](https://www.nexxel.dev/blog/rust)
-- [Rust Is Boring](https://www.youtube.com/watch?v=oY0XwMOSzq4&t=5s&ab_channel=NoBoilerplate)
+- [the rust programming language](https://doc.rust-lang.org/book/)
+- [how to learn rust](https://www.youtube.com/watch?v=2hXNd6x9sZs&ab_channel=NoBoilerplate)
+- [rust enums are better](https://www.youtube.com/watch?v=Epwlk4B90vk&ab_channel=ThePrimeagen)
+- [rust: not just zoom zoom fast](https://www.nexxel.dev/blog/rust)
+- [rust is boring](https://www.youtube.com/watch?v=oY0XwMOSzq4&t=5s&ab_channel=NoBoilerplate)

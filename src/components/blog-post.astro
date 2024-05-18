@@ -5,30 +5,29 @@ import FormatedDate from "../components/formatted-date.astro";
 import ReadingProgress from "../components/reading-progress.astro";
 
 import type { CollectionEntry } from "astro:content";
-type Props = CollectionEntry<"blog">["data"];
+type Props = CollectionEntry<"blog">;
 
-const { title, description, pubDate } = Astro.props;
+const { slug, data: {title, description, pubDate} } = Astro.props;
 ---
 
 <RootLayout
-  title={`${title} • Mario Pérez Hurtado`}
-  description={description}
+  {title}
+  {description}
+  image={`/blog/${slug}/og.png`}
 >
   <ReadingProgress />
-  <main class="my-10">
-    <article class="mx-auto max-w-prose">
-      <Link href="/blog">← back </Link>
-      <h1 class="pt-6 text-lg font-bold">
-        # {title}
-      </h1>
-      <FormatedDate date={pubDate} />
+  <article class="mx-auto max-w-prose pt-6">
+    <Link href="/blog">← back </Link>
+    <h2 class="pt-6 text-lg font-bold">
+      <span class="-ml-[1ch]">{title}</span>
+    </h2>
+    <FormatedDate date={pubDate} />
 
-      <hr class="mt-4 mb-8 h-px border-0 bg-stone-400" />
-      <div id="blog">
-        <slot />
-      </div>
-    </article>
-  </main>
+    <hr class="mt-4 mb-8 h-px border-0 bg-stone-400" />
+    <div id="blog">
+      <slot />
+    </div>
+  </article>
 
   <style is:inline>
     #blog span[data-line] {
@@ -78,7 +77,7 @@ const { title, description, pubDate } = Astro.props;
       margin-bottom: 0.3rem;
     }
     #blog code {
-      background-color: #393b4e;
+      background-color: #44403c;
       padding: 0.1rem 0.3rem;
       font-size: 14px;
       box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
@@ -88,8 +87,8 @@ const { title, description, pubDate } = Astro.props;
       margin: 1rem 0 2rem;
       padding: 1rem;
       font-size: 15px;
-      border-left: 4px solid #4b4e69;
-      background-color: #393b4e;
+      border-left: 4px solid #57534e;
+      background-color: #44403c;
       color: #fff;
       font-style: italic;
     }
