@@ -16,7 +16,7 @@ const { slug, data: {title, description, pubDate} } = Astro.props;
   image={`/blog/${slug}/og.png`}
 >
   <ReadingProgress />
-  <article class="mx-auto max-w-prose pt-6">
+  <article class="pt-6">
     <Link href="/blog">← back </Link>
     <h2 class="pt-6 text-lg font-bold">
       <span class="-ml-[1ch]">{title}</span>
