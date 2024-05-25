@@ -42,15 +42,12 @@ export async function GET({ props }: Props) {
               {
                 type: 'div',
                 props: {
-                  tw: 'flex items-center text-5xl pt-10',
+                  tw: 'flex items-center text-5xl pt-10 text-stone-400',
                   children: post.data.pubDate.toLocaleDateString('en-us', {
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric'
-                  }).toLowerCase(),
-                  style: {
-                    color: '#a8a29e',
-                  },
+                  }),
                 },
               },
             ],
@@ -65,10 +62,8 @@ export async function GET({ props }: Props) {
         },
 
       ],
-      tw: 'w-full h-full flex relative',
+      tw: 'w-full h-full flex relative lowercase bg-stone-900 text-stone-200',
       style: {
-        background: '#1c1917',
-        color: '#e7e5e4',
         fontFamily: "Geist Mono Regular",
       },
     },

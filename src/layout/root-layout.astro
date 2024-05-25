@@ -41,12 +41,11 @@ const { title, description, image = "/og.png" } = Astro.props
 
     <ViewTransitions />
 	</head>
-	<body class="font-mono bg-stone-900 text-stone-300">
-    <main class="flex flex-col py-10 px-5 mx-auto max-w-screen-sm min-h-screen">
-      <Header />
-      <slot/>
-      <Footer />
-    </main>
+	<body class="font-mono bg-stone-900 text-stone-300 flex flex-col py-10 px-5
+  mx-auto max-w-screen-sm min-h-screen lowercase">
+    <Header />
+    <slot/>
+    <Footer />
 	</body>
 
   <style is:global>

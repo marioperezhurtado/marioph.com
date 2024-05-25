@@ -1,57 +1,57 @@
 ---
-title: 'but why tailwind, though?'
-description: "what are these “inline styles”? why should you care?"
+title: 'But Why Tailwind, Though?'
+description: "What are these “inline styles”? Why should you care?"
 pubDate: 'aug 14 2023'
 ---
 
-if you are reading this, you have probably heard people either praising or complaining
-about tailwind.
+If you are reading this, you have probably heard people either praising or complaining
+about Tailwind.
 
-> tailwind is the only mantainable way to style websites. - john doe
+> Tailwind is the only mantainable way to style websites. - John Doe
 
-> tailwind is an absolute mess of cluttered, unreadable classes. - anonymous
+> Tailwind is an absolute mess of cluttered, unreadable classes. - Anonymous
 
-well, maybe no one has specifically said this, but you get the point. for some reason, it is always a hot topic.
+Well, maybe no one has specifically said this, but you get the point. For some reason, it is always a hot topic.
 
-what is tailwind about? what are these _“inline styles”_? Why should you care?
+What is Tailwind about? What are these _“inline styles”_? Why should you care?
 
-first, let's begin by clarifying what **it is not**:
+First, let's begin by clarifying what **it is not**:
 
-## tailwind is not a component framework
+## Tailwind is not a component framework
 
-don't get me wrong, UI component frameworks can be [really good](https://ui.shadcn.com/).
+Don't get me wrong, UI component frameworks can be [amazing](https://ui.shadcn.com/).
 
-but tailwind is just about an opinionated set of low-level utility classes, that guide you to make good choices by default.
+But Tailwind is just about an opinionated set of low-level utility classes, that guide you to make good choices by default.
 
-because tailwind is so low-level, it never encourages you to design the same
-site twice. even with the same color palette and sizing scale, it's easy to build the same component with a _completely_ different look in the next project.
+Because Tailwind is so low-level, it never encourages you to design the same
+site twice. Even with the same color palette and sizing scale, it's easy to build the same component with a _completely_ different look in the next project.
 
-and you can also build amazing UI component frameworks on top of tailwind, but tailwind itself has nothing to do with other solutions that are often compared to.
+And you can also build amazing UI component frameworks on top of Tailwind, but Tailwind itself has nothing to do with other solutions that are often compared to.
 
-there are also other similar (and really interesting) options, like
+There are also other similar (and really interesting) options, like
 [unoCSS](https://unocss.dev/), that follow this line of thought.
 
-## tailwind is not just “inline styling”
+## Tailwind is not just “inline styling”
 
-one of the first things that tailwind is often blamed on, is that it is _“just
+One of the first things that Tailwind is often blamed on, is that it is _“just
 inline styling”_.
 
-what is the difference between using tailwind and just adding inline style tags to the HTML elements?
+What is the difference between using Tailwind and just adding inline style tags to the HTML elements?
 
-there's a few of them:
+There's a few of them:
 
-- **verbosity**. tailwind classes are concise, and some of them even map to more than one style property. With inline styles, you would end up writing much more.
-- **inconsistency**. No constraints on the values you choose, leading to inconsistencies in the design.
-- **larger bundle size**.
-- no sensible defaults, design system, style reset, IDE integration or automatic sorting order of styles.
+- **Verbosity**. Tailwind classes are concise, and some of them even map to more than one style property. With inline styles, you would end up writing much more.
+- **Inconsistency**. No constraints on the values you choose, leading to inconsistencies in the design.
+- **Larger bundle size**.
+- No sensible defaults, design system, style reset, IDE integration or automatic sorting order of styles.
 
-ok so... what is tailwind?
+Ok so... what is Tailwind?
 
-## what is tailwind?
+## What is Tailwind?
 
-tailwind is a utility-first, component driven CSS framework.
+Tailwind is a utility-first, component driven CSS framework.
 
-it provides a set of opinionated **utility classes**, that you can use directly inside your markup.
+It provides a set of opinionated **utility classes**, that you can use directly inside your markup.
 
 ```css showLineNumbers title="bundle.css"
 .flex {
@@ -66,13 +66,13 @@ it provides a set of opinionated **utility classes**, that you can use directly 
 }
 ```
 
-as you can see, each of these classes has a single purpose, and they map to one
-or more CSS properties. you can see the full list [here](https://nerdcave.com/tailwind-cheat-sheet).
+As you can see, each of these classes has a single purpose, and they map to one
+or more CSS properties. You can see the full list [here](https://nerdcave.com/Tailwind-cheat-sheet).
 
-utility classes help you work within the constraints of a system instead of
-littering your stylesheets with arbitrary values. they make it easy to be consistent with color choices, spacing, typography, shadows, and everything else that makes up a well-engineered design system.
+Utility classes help you work within the constraints of a system instead of
+littering your stylesheets with arbitrary values. They make it easy to be consistent with color choices, spacing, typography, shadows, and everything else that makes up a well-engineered design system.
 
-in practice, a component using tailwind, with your framework of choice, would look similar to this:
+In practice, a component using Tailwind, with your framework of choice, would look similar to this:
 
 ```html showLineNumbers title="my-component.svelte"
 <article class="p-4 my-10 mx-auto max-w-sm bg-gray-700 rounded-lg shadow-md">
@@ -80,72 +80,69 @@ in practice, a component using tailwind, with your framework of choice, would lo
     src="https://fakeimg.pl/300x150"
     alt="Placeholder"
     class="object-cover w-full rounded-md aspect-video" />
-  <h2 class="my-5 text-lg font-bold text-white">but why tailwind, though?</h2>
+  <h2 class="my-5 text-lg font-bold text-white">but why Tailwind, though?</h2>
   <div
     class="flex justify-between pt-2 text-sm text-gray-300 border-t border-gray-500">
     <time datetime="2023-08-14">Aug 14 2023</time>
-    <span>Mario Perez Hurtado</span>
+    <span>Mario Pérez Hurtado</span>
   </div>
 </article>
 ```
 
-> now i know what you’re thinking, *“this is an atrocity, what a horrible mess!”* and you’re right, it’s kind of ugly. in fact it’s just about impossible to think this is a good idea the first time you see it — **you have to actually try it**. - tailwind docs
+> Now I know what you’re thinking, *“this is an atrocity, what a horrible mess!”* and you’re right, it’s kind of ugly. In fact it’s just about impossible to think this is a good idea the first time you see it — **you have to actually try it**. - Tailwind docs
 
-but once you’ve actually built something this way, you’ll quickly notice some really important benefits:
+But once you’ve actually built something this way, you’ll quickly notice some really important benefits:
 
-- **you aren’t wasting energy inventing class names**. no more adding silly class names like `sidebar-inner-wrapper` just to be able to style something, and no more agonizing over the perfect abstract name for something that’s really just a flex container.
+- **You aren’t wasting energy inventing class names**. No more adding silly class names like `sidebar-inner-wrapper` just to be able to style something, and no more agonizing over the perfect abstract name for something that’s really just a flex container.
 
-- **your CSS stops growing**. using a traditional approach, your CSS files get
-  bigger every time you add a new feature. with utilities, everything is reusable so you rarely need to write new CSS.
+- **Your CSS stops growing**. Using a traditional approach, your CSS files get
+  bigger every time you add a new feature. With utilities, everything is reusable so you rarely need to write new CSS.
 
-- **making changes feels safer**. CSS is global and you never know what you’re
-  breaking when you make a change. classes in your HTML are local, so you can change them without worrying about something else breaking.
+- **Making changes feels safer**. CSS is global and you never know what you’re
+  breaking when you make a change. Classes in your HTML are local, so you can change them without worrying about something else breaking.
 
-when you realize how productive you can be working exclusively in HTML with predefined utility classes, working any other way will feel like torture.
+When you realize how productive you can be working exclusively in HTML with predefined utility classes, working any other way will feel like torture.
 
-## “best practices” don’t actually work
+## “Best practices” don’t actually work
 
-this is a bold statement, but it's not far from the truth. this statement comes
-directly from the creator of tailwind CSS.
+This is a bold statement, but in my own experience, it's not far from the truth. It comes directly from the creator of Tailwind CSS.
 
-> i’ve written a few thousand words on why traditional “semantic class names” are the reason CSS is hard to maintain, but the truth is you’re never going to believe me until you actually try it. if you can suppress the urge to retch long enough to give it a chance, i really think you’ll wonder how you ever worked with CSS any other way. - adam wathan
+> I’ve written a few thousand words on why traditional “semantic class names” are the reason CSS is hard to maintain, but the truth is you’re never going to believe me until you actually try it. If you can suppress the urge to retch long enough to give it a chance, I really think you’ll wonder how you ever worked with CSS any other way. - Adam Wathan
 
-[this article](https://adamwathan.me/css-utility-classes-and-separation-of-concerns/) explains various CSS approaches and “best practices”, from semantic CSS, BEM (Block-Element-Modifier), content-agnostic CSS, to how utility-first CSS and the use of components can avoid a lot of bloat and complexity in stylesheets.
+[This article](https://adamwathan.me/css-utility-classes-and-separation-of-concerns/) explains various CSS approaches and “best practices”, from semantic CSS, BEM (Block-Element-Modifier), content-agnostic CSS, to how utility-first CSS and the use of components can avoid a lot of bloat and complexity in stylesheets.
 
-go check it out if you want a more in-depth read about it.
+Go check it out if you want a more in-depth read about it.
 
-## small CSS bundle
+## Small CSS bundle
 
-think about how many times you write `margin: x` , or `padding: x` in every CSS
-file. using semantic CSS, you need to ship every CSS property of every selector to the client.
+Think about how many times you write `margin: x` , or `padding: x` in every CSS
+file. Using semantic CSS, you need to ship every CSS property of every selector to the client.
 
-tailwind automatically removes all unused CSS when building for production,
-which means your final CSS bundle is the smallest it could possibly be. in fact,
-most tailwind projects ship less than 10kB of CSS to the client.
+Tailwind automatically removes all unused CSS when building for production,
+which means your final CSS bundle is the smallest it could possibly be. In fact,
+most Tailwind projects ship less than 10kB of CSS to the client.
 
-## how to “learn” tailwind
+## How to “learn” Tailwind
 
-Perhaps you want to try tailwind and see if it's as nice to work with as it sounds. _How do i learn it?_
+Perhaps you want to try Tailwind and see if it's as nice to work with as it sounds. _How do I learn it?_
 
-**You don't really need to.**
+**You don't really need to.** If you already know CSS, you just have to start styling, looking up the utility classes you need to use, in a [cheatsheet](https://nerdcave.com/Tailwind-cheat-sheet).
 
-if you already know CSS, you just have to start styling, looking up the utility classes you need to use, in a [cheatsheet](https://nerdcave.com/tailwind-cheat-sheet).
+You will be slow at the start, but in a few hours or less, you will remember
+most of the most commonly used classes. A few special things here and there ([hover states](https://Tailwindcss.com/docs/hover-focus-and-other-states), [media queries](https://Tailwindcss.com/docs/responsive-design), [dark mode](https://Tailwindcss.com/docs/dark-mode)), and you will be back to your normal pace, probably even faster.
 
-you will be slow at the start, but in a few hours or less, you will remember
-most of the most commonly used classes. a few special things here and there ([hover states](https://tailwindcss.com/docs/hover-focus-and-other-states), [media queries](https://tailwindcss.com/docs/responsive-design), [dark mode](https://tailwindcss.com/docs/dark-mode)), and you will be back to your normal pace, probably even faster.
+And most importantly, you will have a highly maintainable solution to work in a team, with consistency, good defaults, a small bundle, immediate understanding of the codebase styling, and less overhead.
 
-and most importantly, you will have a highly maintainable solution to work in a team, with consistency, good defaults, a small bundle, immediate understanding of the codebase styling, and less overhead.
+A few tips:
 
-a few tips:
+- Create and reuse components.
+- Avoid using arbitrary values.
+- Customize your own properties.
+- Use the sorting plugin.
+- Think mobile-first.
 
-- create and reuse components.
-- avoid using arbitrary values.
-- customize your own properties.
-- use the sorting plugin.
-- think mobile-first.
+## Other resources
 
-## other resources
-
-- [tailwind docs](https://tailwindcss.com/docs)
+- [Tailwind docs](https://Tailwindcss.com/docs)
 - [CSS utility classes and "separation of
   concerns"](https://adamwathan.me/css-utility-classes-and-separation-of-concerns/)

@@ -25,7 +25,7 @@ export async function GET() {
                 type: 'div',
                 props: {
                   tw: 'text-6xl',
-                  children: "hi there, i'm mario. i build stuff and learn along the way. welcome to my personal site.",
+                  children: "hi there, i'm mario. I build stuff and learn along the way. welcome to my personal site.",
                   style: {
                     fontFamily: "Geist Mono Bold",
                   },

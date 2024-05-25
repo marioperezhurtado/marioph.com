@@ -3,25 +3,25 @@ import Link from "./link.astro"
 
 const PROJECTS = [
   {
-    title: "boble",
-    description: "real-time web chat.",
+    title: "Boble",
+    description: "Real-time web chat.",
     link: "https://boble.chat/",
   },
   {
-    title: "arbicuir",
-    description: "corporate website for a leather engraving company.",
+    title: "Arbicuir",
+    description: "Corporate website for a leather engraving company.",
     link: "https://arbicuir.com/",
   },
   {
-    title: "barbería HB",
-    description: "website for a local barbershop.",
+    title: "Barbería HB",
+    description: "Website for a local barbershop.",
     link: "https://barberiahb.com/",
   },
 ]
 ---
 
 <section class="py-6">
-  <h2 class="pb-2 text-lg font-bold text-stone-200">projects</h2>
+  <h2 class="pb-2 text-lg font-bold text-stone-200">Projects</h2>
 
   <ul class="flex flex-col gap-2 pb-3 text-sm">
     {PROJECTS.map((project) => (
@@ -45,6 +45,6 @@ const PROJECTS = [
     rel="noopener noreferrer"
     arrow
   >
-    more projects 
+    More projects 
   </Link>
 </section>

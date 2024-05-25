@@ -16,8 +16,8 @@ export const GET: APIRoute = async ({ site }) => {
   });
 
   return rss({
-    title: "marioph • blog",
-    description: "sometimes i write about stuff i find interesting.",
+    title: "Marioph • Blog",
+    description: "Sometimes I write about stuff I find interesting.",
     site: site!,
     items: sortedPosts.map((post) => ({
       title: post.data.title,

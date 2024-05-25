@@ -11,13 +11,13 @@ const { slug, data: {title, description, pubDate} } = Astro.props;
 ---
 
 <RootLayout
-  {title}
-  {description}
+  title={title.toLowerCase()}
+  description={description.toLowerCase()}
   image={`/blog/${slug}/og.png`}
 >
   <ReadingProgress />
   <article class="pt-6">
-    <Link href="/blog">← back </Link>
+    <Link href="/blog">← Back </Link>
     <h2 class="pt-6 text-lg font-bold">
       <span class="-ml-[1ch]">{title}</span>
     </h2>
