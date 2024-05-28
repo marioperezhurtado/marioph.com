@@ -29,7 +29,9 @@ const SOCIAL_LINKS = [
           {link.name}
         </Link>
       </li>
-      {index !== SOCIAL_LINKS.length - 1 && <span>/</span>}
+      {index !== SOCIAL_LINKS.length - 1 && (
+        <span role="presentation" aria-hidden="true">/</span>
+      )}
     </>
   ))}
 </ul>

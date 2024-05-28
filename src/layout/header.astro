@@ -31,7 +31,9 @@ const SITE_LINKS = [
               {link.name}
             </Link>
           </li>
-          {index < SITE_LINKS.length - 1 && <span>/</span>}
+          {index < SITE_LINKS.length - 1 && (
+            <span role="presentation" aria-hidden="true">/</span>
+          )}
         </>
       ))}
    </ul>
