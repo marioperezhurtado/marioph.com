@@ -8,6 +8,9 @@ export default {
       fontFamily: {
         mono: ["Geist Mono", ...defaultTheme.fontFamily.mono],
       },
+      screens: {
+        xs: '500px',
+      },
     },
 	},
 	plugins: [],

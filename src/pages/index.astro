@@ -2,8 +2,8 @@
 import RootLayout from "../layout/root-layout.astro"
 import Link from "../components/link.astro"
 import SocialLinks from "../components/social-links.astro"
-import ProjectsSection from "../components/projects-section.astro"
-import BlogSection from "../components/blog-section.astro"
+import Projects from "./_sections/projects.astro"
+import Blog from "./_sections/blog.astro"
 ---
 
 <RootLayout 
@@ -28,9 +28,9 @@ import BlogSection from "../components/blog-section.astro"
     <SocialLinks />
   </section>
 
-  <ProjectsSection />
+  <Projects/>
 
-  <BlogSection />
+  <Blog />
 
   <section class="py-6">
     <h2 class="pb-2 text-lg font-bold text-stone-200">Get in touch</h2>

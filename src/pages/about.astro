@@ -1,7 +1,8 @@
 ---
 import RootLayout from "../layout/root-layout.astro"
-import WorkExperienceSection from "../components/work-experience-section.astro"
-import KindWordsSection from "../components/kind-words-section.astro"
+import WorkExperience from "./_sections/work-experience.astro"
+import Education from "./_sections/education.astro"
+import KindWords from "./_sections/kind-words.astro"
 import Link from "../components/link.astro"
 ---
 
@@ -37,7 +38,7 @@ import Link from "../components/link.astro"
     </div>
   </section>
 
-  <WorkExperienceSection />
-
-  <KindWordsSection />
+  <WorkExperience />
+  <Education />
+  <KindWords />
 </RootLayout>
