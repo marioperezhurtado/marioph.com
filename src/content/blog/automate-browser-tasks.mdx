@@ -1,0 +1,180 @@
+---
+title: 'Automating Browser Tasks'
+description: 'Boost efficiency and productivity by automating repetitive tasks using Playwright.'
+pubDate: 'jul 20, 2024'
+---
+
+**I hate repetitive tasks**.
+
+I'd rather spend triple the time automating a task than doing it manually over
+and over again. Also, I love coding, and helping my team move faster is a great
+feeling.
+
+## Why To Automate?
+
+_Automation is key to efficiency_. When people are not repeatedly doing the same
+task, they can focus on more creative and challenging activities that bring more
+value overall.
+
+Automation saves time and money, and makes people happier and more productive.
+
+In an ideal world, all systems would be interconnected and most of the processes
+would be automatic. Services should expose APIs to interact with, allowing us to
+easily integrate them with other systems.
+
+```
++---------------+      +-----------------+
+|   System A    |      |     System B    |
++---------------+      +-----------------+
+        ∧                       ∧
+        |    +-------------+    |
+        +--->| Integration |<---+
+             +-------------+
+```
+
+But reality isn't always so pretty. We often have to deal with legacy systems,
+or systems that do not offer APIs to interact with.
+
+We should strive to migrate to better systems and services whenever possible,
+but in the meantime we still can resort to _browser automation._
+
+```
++---------------+      +-----------------+
+|   System A    |      |     System B    |
++---------------+      +-----------------+
+        ∧                       ∧
+        |                       |
+        ∨                       ∨
++---------------+      +-----------------+
+|   Website A   |      |    Website B    |
++---------------+      +-----------------+
+        ∧                      ∧
+        |    +------------+    |
+        |    | Browser    |    |
+        +--->| Automation |<---+
+             +------------+
+```
+
+Yes, it's not the ideal solution, because it's slower and more fragile than using
+APIs, but again, sometimes we must deal with what we have and make the best of it.
+
+
+## Browser Automation
+
+Browser automation is the process of controlling a web browser through a script
+or a program. This allows us to interact with web pages, fill forms, click buttons,
+and extract data from websites, just like a human would do, but programmatically.
+
+There are several tools available to achieve this, such as Selenium, Puppeteer,
+and Playwright. In this article, we'll focus on Playwright, a relatively new
+tool that is gaining popularity due to its simplicity and speed.
+
+I've used Playwright in the past for end-to-end testing, but I recently discovered that it can be used for other purposes, such as web scraping, monitoring, and automating repetitive tasks. It's pretty straightforward to set up and use.
+
+## Getting Started
+
+Before diving into the example code, let's set up a new project and install
+Playwright. We will need to have Node.js installed.
+
+```bash
+npm init -y
+npm install playwright
+```
+
+Playwright supports multiple browsers, such as Chromium, Firefox, and WebKit. You can install them using the following command:
+
+```bash
+npx playwright install
+```
+
+Now we are ready to go.
+
+
+## Automating a Simple Task
+
+Let's say you have to log in to a website every day to retrieve a list of return
+requests, then fill a form with the data in other website, and write the ID back
+in the first website to mark it as complete. This is a repetitive task that can be easily automated.
+
+```javascript
+import { chromium } from 'playwright'; // or 'firefox' or 'webkit'
+
+// Open browser
+const context = await chromium.launch();
+
+// Open return requests website
+const requestsPage = await context.newPage();
+await requestsPage.goto('https://some-website.com/return-requests');
+
+// Log in
+await loginRequestsPage(requestsPage);
+
+// Get return request data
+const requests = await getReturnRequests(requestsPage);
+
+for (const request of requests) {
+  // Open send requests website
+  const sendPage = await context.newPage();
+  await sendPage.goto('https://another-website.com/send-requests');
+
+  // Fill form with return request data
+  await fillForm(sendPage, request);
+
+  // Write ID back in the first website
+  await writeId(requestsPage, request.id);
+}
+
+console.log('All requests processed successfully.');
+
+// Close browser
+await context.close();
+```
+
+This is just a high-level overview of the process.
+
+- Open the browser.
+- Open the first website and log in.
+- Get the return requests data.
+- For each request, open the second website, log in, fill the form, and write the ID back.
+- Close the browser.
+
+As you can see, the code is pretty straightforward and easy to understand. Playwright
+provides a simple API to interact with web pages, making it easy to automate tasks.
+
+To see this in more detail, let's implement some of the functions used in the code above.
+
+```javascript
+async function loginRequestsPage(page) {
+  await page.fill('#username', 'my-username');
+  await page.fill('#password', 'my-password');
+  await page.click('#login-button');
+}
+
+async function getReturnRequests(page) {
+  const requests = await page.evaluate(() => {
+    const rows = document.querySelectorAll('.return-request');
+    return Array.from(rows, row => {
+      return {
+        id: row.querySelector('.id').innerText,
+        date: row.querySelector('.date').innerText,
+        status: row.querySelector('.status').innerText,
+      };
+    });
+  });
+
+  return requests;
+}
+```
+
+We are basically manipulating the DOM of the web pages to interact with them. We
+fill forms, click buttons, and extract data from the pages.
+
+This is just a simple example, but you can automate more complex tasks using
+Playwright. You can interact with multiple pages, handle popups, download files,
+and much more. **It's just JavaScript and DOM manipulation all the way down.**
+
+## Conclusion
+
+With just a few lines of code, you can save hours of manual work by automating browser tasks, using tools like Playwright (or Selenium, Puppeteer, etc).
+
+Just remember to try to integrate systems using APIs whenever possible, as they are faster and more reliable than browser automation. But when you have no other choice, go ahead and script your way through the web.
