@@ -1,49 +1,51 @@
 ---
-import RootLayout from "../layout/root-layout.astro"
-import Link from "../components/link.astro"
+import RootLayout from "../layout/root-layout.astro";
+import Link from "../components/link.astro";
 
 const SONGS = [
   {
-    title: "Amor al Arte",
-    artist: "Jorge Drexler",
+    title: "VOYCONTODO",
+    artist: "Ralphie Choo",
     thumbnail:
-    "https://lh3.googleusercontent.com/FUngEFD4KPzkUqR0LnR_yKhIZ8hJqaDR3d42aeLcenSAy2qFdQbUJUSMBAXMecyKlgRAzkXUKtOE9S5E=w544-h544-l90-rj",
-    url: "https://music.youtube.com/watch?v=2rlT3JbpCeQ",
+      "https://lh3.googleusercontent.com/72cZLAzz6ZfDJgr-mNv3NhhMT9PXplbvo9Q0M09NsZ6Jnc_rG77Z_rlphYgGc_6KsAkQVRRG-7xnQ1U=w544-h544-l90-rj",
+    url: "https://music.youtube.com/watch?v=f-RZY0tEHQc",
   },
   {
-    title: "Tiranosaurius Rex",
-    artist: "Kase.O",
+    title: "Toy joya",
+    artist: "Cruz Cafuné",
     thumbnail:
-    "https://lh3.googleusercontent.com/kbn_Ggkr3kM0qm24gCWmOrhsvaPOene1PECHQuGCNxK5sKcOQ-TUNO1AknmoddRHZUhNKdx2G-oJs9lk=w544-h544-l90-rj",
-    url: "https://music.youtube.com/watch?v=S1mdkKi_wzk",
+      "https://lh3.googleusercontent.com/c0I14iylmc47auHzRCXLi6mijES_b7QYpKOFY7U2g04HUJcXhDO6d8-BrbRLJq_6OIphCBAvj_9ku3o8=w544-h544-l90-rj",
+    url: "https://music.youtube.com/watch?v=SHDVl9jzwmY",
   },
   {
-    title: "Morfeo",
-    artist: "Wos",
+    title: "Heavenly",
+    artist: "Judeline",
     thumbnail:
-         "https://lh3.googleusercontent.com/QF86sCMmaCFPHki2JW4RfNddd_IYp-bpsP8ll52a-RmAlWls9ggQrfrT1_fERHSaM3yav0qP9ox8s0-6gQ=w544-h544-l90-rj",
-    url: "https://music.youtube.com/watch?v=4gOMr9xK0bI",
+      "https://lh3.googleusercontent.com/_pwkfG7-LZE3Eg-fky6lj0ep_Daj2zT5lUn7B4LKSFhKYbY-lE3X7O6om6PqLOdeOn88Zf8pMOTslCXdjg=w544-h544-l90-rj",
+    url: "https://music.youtube.com/watch?v=0QQhfrRZ5ig",
   },
   {
-    title: "Vitalicio",
-    artist: "Milo j",
-    thumbnail: "https://lh3.googleusercontent.com/yMSUiCAUsfY1CojVyJNO37U4Y4KI0Iboi6hWpt61q1UCb0nhxDLiRTlFRCND_bYz8f6HTl3ROSMYc60=w544-h544-l90-rj",
-    url: "https://music.youtube.com/watch?v=JE6hsBsH5Sg",
+    title: "YOKO",
+    artist: "Alvaro Díaz",
+    thumbnail:
+      "https://lh3.googleusercontent.com/8pvY9zthtwIahoNq1vExrecizfQ1YoSg_LIJSHxicVsCHDILBqOH2aWBAh-6DUNrineRiTaV8wfwaV-N=w544-h544-l90-rj",
+    url: "https://music.youtube.com/watch?v=ovrTphjeZSI",
   },
   {
-    title: "Santo Grial",
-    artist: "Dano",
+    title: "Algo nos olíamos",
+    artist: "mvrk",
     thumbnail:
-    "https://lh3.googleusercontent.com/7Y9Im1Lniov6oMJwwFIwD-u2PU1sXIjJE3Wgr_uIS_wLnTv3fmvXyr1EOkA6MW3VI8oEMlgSMETfMIh_=w544-h544-l90-rj",
-    url: "https://music.youtube.com/watch?v=ZclzN7R_mmE",
+      "https://lh3.googleusercontent.com/68nwZmFjz3iRvvIMOQm_xCUsCu7xR7L7R4L1-wjlmB2bb89gyqrRL6cqqCSQdrYM9S-eMEBMn6NFlxtC=w544-h544-l90-rj",
+    url: "https://music.youtube.com/watch?v=DmpQAAZ-AWw",
   },
-    {
-    title: "Mañana Será Otro Día",
-    artist: "Canserbero",
-    thumbnail: "https://lh3.googleusercontent.com/-Y9zzd0aHTC3JLPDpU0D1E08mhXt3-5sq0OLLx_nrmAnqcNJR0anEnaZ6UdvTf_9_8gs5RWcjlbvEPg2=w544-h544-l90-rj",
-    url: "https://music.youtube.com/watch?v=uHEF0dI7nLY",
+  {
+    title: "Una carta",
+    artist: "Lucho RK",
+    thumbnail:
+      "https://lh3.googleusercontent.com/v4XKgX5unLb8ekNPxHphdBqQ1xn-vU432E44iBB5Ye4e1Zu2hZf-5stUtthPbGg1BOM4M4i1TLC6iswm=w544-h544-l90-rj",
+    url: "https://music.youtube.com/watch?v=J4KYIxbtErE",
   },
-]
+];
 ---
 
 <RootLayout
@@ -52,31 +54,31 @@ const SONGS = [
 >
   <section class="py-6">
     <h2 class="pb-2 text-lg font-bold text-stone-200">music</h2>
-    <p>
-      Some tunes i've been vibing with lately.
-    </p>
+    <p>Some tunes i've been vibing with lately.</p>
 
     <ul class="flex flex-col gap-4 pt-8">
-      {SONGS.map((song) => (
-        <li class="flex gap-8">
-          <img 
-            src={song.thumbnail} 
-            alt={song.title} 
-            class="object-cover w-20 h-20 bg-stone-700 aspect-square" 
-          />
-          <div class="flex flex-col gap-2 mt-2">
-            <Link 
-              href={song.url} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              bold
-            >
-              {song.title}
-            </Link>
-            <p class="text-xs text-stone-400">{song.artist}</p>
-          </div>
-        </li>
-      ))}
+      {
+        SONGS.map((song) => (
+          <li class="flex gap-8">
+            <img
+              src={song.thumbnail}
+              alt={song.title}
+              class="object-cover w-20 h-20 bg-stone-700 aspect-square"
+            />
+            <div class="flex flex-col gap-2 mt-2">
+              <Link
+                href={song.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                bold
+              >
+                {song.title}
+              </Link>
+              <p class="text-xs text-stone-400">{song.artist}</p>
+            </div>
+          </li>
+        ))
+      }
     </ul>
   </section>
 </RootLayout>
