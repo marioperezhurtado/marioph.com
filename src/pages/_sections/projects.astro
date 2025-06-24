@@ -1,5 +1,5 @@
 ---
-import Link from "../../components/link.astro"
+import Link from "../../components/link.astro";
 
 const PROJECTS = [
   {
@@ -17,34 +17,36 @@ const PROJECTS = [
     description: "Website for a local barbershop.",
     link: "https://barberiahb.com/",
   },
-]
+];
 ---
 
-<section class="py-6">
+<section class="mb-16">
   <h2 class="pb-2 text-lg font-bold text-stone-200">Projects</h2>
 
   <ul class="flex flex-col gap-2 pb-3 text-sm">
-    {PROJECTS.map((project) => (
-      <li>
-        <Link 
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          bold
-        >
-          {project.title}
-        </Link>
-        <p>{project.description}</p>
-      </li>
-    ))}
+    {
+      PROJECTS.map((project) => (
+        <li>
+          <Link
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            bold
+          >
+            {project.title}
+          </Link>
+          <p>{project.description}</p>
+        </li>
+      ))
+    }
   </ul>
 
-  <Link 
-    href="https://github.com/marioperezhurtado" 
+  <Link
+    href="https://github.com/marioperezhurtado"
     target="_blank"
     rel="noopener noreferrer"
     arrow
   >
-    More projects 
+    More projects
   </Link>
 </section>

@@ -7,23 +7,26 @@ import ReadingProgress from "../components/reading-progress.astro";
 import type { CollectionEntry } from "astro:content";
 type Props = CollectionEntry<"blog">;
 
-const { slug, data: {title, description, pubDate} } = Astro.props;
+const {
+  slug,
+  data: { title, description, pubDate },
+} = Astro.props;
 ---
 
 <RootLayout
-  title={title.toLowerCase()}
-  description={description.toLowerCase()}
+  title={title}
+  description={description}
   image={`/blog/${slug}/og.png`}
 >
   <ReadingProgress />
-  <article class="pt-6">
+  <article>
     <Link href="/blog">← Back </Link>
     <h2 class="pt-6 text-lg font-bold">
       <span class="-ml-[1ch]">{title}</span>
     </h2>
     <FormatedDate date={pubDate} />
 
-    <hr class="mt-4 mb-8 h-px border-0 bg-stone-400" />
+    <hr class="h-px mt-4 mb-8 border-0 bg-stone-400" />
     <div id="blog">
       <slot />
     </div>
@@ -62,7 +65,8 @@ const { slug, data: {title, description, pubDate} } = Astro.props;
     }
     #blog pre {
       padding: 0.8rem 0;
-      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+      box-shadow:
+        0 4px 6px -1px rgb(0 0 0 / 0.1),
         0 2px 4px -2px rgb(0 0 0 / 0.1);
       overflow-x: auto;
       margin-bottom: 1.5rem;
@@ -81,7 +85,8 @@ const { slug, data: {title, description, pubDate} } = Astro.props;
       padding: 0.1rem 0.3rem;
       font-size: 14px;
       text-transform: none !important;
-      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+      box-shadow:
+        0 4px 6px -1px rgb(0 0 0 / 0.1),
         0 2px 4px -2px rgb(0 0 0 / 0.1);
     }
     #blog blockquote {
@@ -120,7 +125,9 @@ const { slug, data: {title, description, pubDate} } = Astro.props;
       list-style: decimal;
     }
     img {
-      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      box-shadow:
+        0 4px 6px -1px rgb(0 0 0 / 0.1),
+        0 2px 4px -2px rgb(0 0 0 / 0.1);
       margin: 1rem 0;
       max-height: 400px;
     }

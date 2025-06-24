@@ -1,5 +1,5 @@
 ---
-import Link from "./link.astro"
+import Link from "./link.astro";
 
 const SOCIAL_LINKS = [
   {
@@ -12,26 +12,26 @@ const SOCIAL_LINKS = [
   },
   {
     name: "Email",
-    url: "mailto:marioph10@gmail.com"
+    url: "mailto:marioph10@gmail.com",
   },
-]
+];
 ---
 
 <ul class="flex gap-2.5 text-sm text-stone-400">
-  {SOCIAL_LINKS.map((link, index) => (
-    <>
-      <li>
-        <Link 
-          href={link.url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {link.name}
-        </Link>
-      </li>
-      {index !== SOCIAL_LINKS.length - 1 && (
-        <span role="presentation" aria-hidden="true">/</span>
-      )}
-    </>
-  ))}
+  {
+    SOCIAL_LINKS.map((link, index) => (
+      <>
+        <li>
+          <Link href={link.url} target="_blank" rel="noopener noreferrer">
+            {link.name}
+          </Link>
+        </li>
+        {index !== SOCIAL_LINKS.length - 1 && (
+          <span role="presentation" aria-hidden="true">
+            /
+          </span>
+        )}
+      </>
+    ))
+  }
 </ul>

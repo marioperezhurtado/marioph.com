@@ -1,35 +1,46 @@
 ---
 const WORK_EXPERIENCE = [
   {
-    title: "Web Developer @gioseppo",
-    period: "March 2024 - Present",
-    description: "Developing the company's e-commerce platform & internal tools."
+    title: "Frontend Developer @Alten",
+    period: "June 2025 - Present",
+    description:
+      "Building web applications and collaborating with a team of developers to deliver high-quality software solutions.",
+  },
+  {
+    title: "Web Developer @Gioseppo",
+    period: "March 2024 - June 2025",
+    description:
+      "Developed the company's e-commerce platform, improving user experience. Built multiple internal productivity tools.",
   },
   {
     title: "Freelance Developer",
     period: "June 2022 - March 2024",
-    description: "Developed websites and mobile apps for local companies. Increased online visibility and helped to automate processes."
+    description:
+      "Developed websites and mobile apps for local companies. Increased online visibility and helped to automate processes.",
   },
   {
-    title: "IT Technician Internship @mundozone",
+    title: "IT Technician Internship @MundoZone",
     period: "March 2022 - June 2022",
-    description: "Maintained computer systems and network infrastructure. Managed sales on online platforms. Provided customer service."
+    description:
+      "Maintained computer systems and network infrastructure. Managed sales on online platforms. Provided customer service.",
   },
-]
+];
 ---
 
-<section class="py-6">
+<section class="mb-16">
   <h2 class="pb-2 text-lg font-bold text-stone-200">Work experience</h2>
 
   <ul class="flex flex-col gap-3 text-sm">
-    {WORK_EXPERIENCE.map((experience) => (
-      <li class="gap-6 justify-between sm:flex">
-        <div class="max-w-sm">
-          <h3 class="font-bold">{experience.title}</h3>
+    {
+      WORK_EXPERIENCE.map((experience) => (
+        <li>
+          <div class="items-center justify-between mb-1 sm:flex">
+            <h3 class="font-bold">{experience.title}</h3>
+            <span class="text-stone-400 text-nowrap">{experience.period}</span>
+          </div>
           <p>{experience.description}</p>
-        </div>
-        <span class="text-stone-400 text-nowrap">{experience.period}</span>
-      </li>
-    ))}
+        </li>
+      ))
+    }
   </ul>
 </section>

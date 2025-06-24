@@ -1,11 +1,11 @@
-import { getCollection, type CollectionEntry } from "astro:content"
-import { ImageResponse } from '@vercel/og'
-import fs from 'fs';
-import path from 'path';
+import { getCollection, type CollectionEntry } from "astro:content";
+import { ImageResponse } from "@vercel/og";
+import fs from "fs";
+import path from "path";
 
 interface Props {
-  params: { slug: string }
-  props: { post: CollectionEntry<"blog"> }
+  params: { slug: string };
+  props: { post: CollectionEntry<"blog"> };
 }
 
 export async function GET({ props }: Props) {
@@ -13,26 +13,26 @@ export async function GET({ props }: Props) {
 
   // using custom font files
   const GeistMonoBold = fs.readFileSync(
-    path.resolve('./fonts/GeistMono-Bold.ttf'),
+    path.resolve("./fonts/GeistMono-Bold.ttf")
   );
   const GeistMonoRegular = fs.readFileSync(
-    path.resolve('./fonts/GeistMono-Regular.ttf'),
+    path.resolve("./fonts/GeistMono-Regular.ttf")
   );
 
   // Astro doesn't support tsx endpoints so usign React-element objects
   const html = {
-    type: 'div',
+    type: "div",
     props: {
       children: [
         {
-          type: 'div',
+          type: "div",
           props: {
-            tw: 'absolute left-[80px] top-[180px] flex flex-col w-[1030px]',
+            tw: "absolute left-[80px] top-[180px] flex flex-col w-[1030px]",
             children: [
               {
-                type: 'div',
+                type: "div",
                 props: {
-                  tw: 'text-6xl',
+                  tw: "text-6xl",
                   children: `# ${post.data.title}`,
                   style: {
                     fontFamily: "Geist Mono Bold",
@@ -40,13 +40,13 @@ export async function GET({ props }: Props) {
                 },
               },
               {
-                type: 'div',
+                type: "div",
                 props: {
-                  tw: 'flex items-center text-5xl pt-10 text-stone-400',
-                  children: post.data.pubDate.toLocaleDateString('en-us', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
+                  tw: "flex items-center text-5xl pt-10 text-stone-400",
+                  children: post.data.pubDate.toLocaleDateString("en-us", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
                   }),
                 },
               },
@@ -54,15 +54,14 @@ export async function GET({ props }: Props) {
           },
         },
         {
-          type: 'div',
+          type: "div",
           props: {
-            tw: 'absolute right-[80px] bottom-[60px] flex items-center text-5xl',
-            children: 'marioph.com ✨',
+            tw: "absolute right-[80px] bottom-[60px] flex items-center text-5xl",
+            children: "marioph.com ✨",
           },
         },
-
       ],
-      tw: 'w-full h-full flex relative lowercase bg-stone-900 text-stone-200',
+      tw: "w-full h-full flex relative bg-stone-900 text-stone-200",
       style: {
         fontFamily: "Geist Mono Regular",
       },
@@ -89,10 +88,9 @@ export async function GET({ props }: Props) {
 
 // to generate an image for each blog posts in a collection
 export async function getStaticPaths() {
-  const blogPosts = await getCollection('blog');
+  const blogPosts = await getCollection("blog");
   return blogPosts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
   }));
 }
-

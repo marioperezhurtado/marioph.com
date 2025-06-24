@@ -1,33 +1,30 @@
 ---
-import Link from "../../components/link.astro"
-import FormattedDate from "../../components/formatted-date.astro"
-import { getCollection } from "astro:content"
+import Link from "../../components/link.astro";
+import FormattedDate from "../../components/formatted-date.astro";
+import { getCollection } from "astro:content";
 
-const posts = (await getCollection('blog')).sort(
+const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-)
+);
 
-const latestPosts = posts.slice(0, 3)
+const latestPosts = posts.slice(0, 3);
 ---
 
-<section class="py-6">
+<section class="mb-16">
   <h2 class="pb-2 text-lg font-bold text-stone-200">Blog</h2>
 
   <ul class="flex flex-col gap-2 pb-4 text-sm">
-    {latestPosts.map((post) => (
-      <li class="flex gap-5 justify-between">
-        <Link 
-          href={`blog/${post.slug}`}
-          bold
-        >
-          {post.data.title}
-        </Link>
-        <FormattedDate date={post.data.pubDate} />
-      </li>
-    ))}
+    {
+      latestPosts.map((post) => (
+        <li class="flex justify-between gap-5">
+          <Link href={`blog/${post.slug}`} bold>
+            {post.data.title}
+          </Link>
+          <FormattedDate date={post.data.pubDate} />
+        </li>
+      ))
+    }
   </ul>
-    
-  <Link href="/blog" arrow>
-    All posts
-  </Link>
+
+  <Link href="/blog" arrow> All posts </Link>
 </section>

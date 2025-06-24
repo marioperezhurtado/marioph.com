@@ -1,52 +1,52 @@
-import { ImageResponse } from '@vercel/og'
-import fs from 'fs';
-import path from 'path';
+import { ImageResponse } from "@vercel/og";
+import fs from "fs";
+import path from "path";
 
 export async function GET() {
   // using custom font files
   const GeistMonoBold = fs.readFileSync(
-    path.resolve('./fonts/GeistMono-Bold.ttf'),
+    path.resolve("./fonts/GeistMono-Bold.ttf")
   );
   const GeistMonoRegular = fs.readFileSync(
-    path.resolve('./fonts/GeistMono-Regular.ttf'),
+    path.resolve("./fonts/GeistMono-Regular.ttf")
   );
 
   // Astro doesn't support tsx endpoints so usign React-element objects
   const html = {
-    type: 'div',
+    type: "div",
     props: {
       children: [
         {
-          type: 'div',
+          type: "div",
           props: {
-            tw: 'absolute left-[80px] top-[180px] flex flex-col w-[1030px]',
+            tw: "absolute left-[80px] top-[180px] flex flex-col w-[1030px]",
             children: [
               {
-                type: 'div',
+                type: "div",
                 props: {
-                  tw: 'text-6xl',
-                  children: "hi there, i'm mario. I build stuff and learn along the way. welcome to my personal site.",
+                  tw: "text-6xl",
+                  children:
+                    "I build stuff — mostly for the web. Welcome to my personal site.",
                   style: {
                     fontFamily: "Geist Mono Bold",
                   },
                 },
               },
-           ],
+            ],
           },
         },
         {
-          type: 'div',
+          type: "div",
           props: {
-            tw: 'absolute right-[80px] bottom-[60px] flex items-center text-5xl',
-            children: 'marioph.com ✨',
+            tw: "absolute right-[80px] bottom-[60px] flex items-center text-5xl",
+            children: "marioph.com ✨",
           },
         },
-
       ],
-      tw: 'w-full h-full flex relative',
+      tw: "w-full h-full flex relative",
       style: {
-        background: '#1c1917',
-        color: '#e7e5e4',
+        background: "#1c1917",
+        color: "#e7e5e4",
         fontFamily: "Geist Mono Regular",
       },
     },

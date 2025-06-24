@@ -1,62 +1,40 @@
 ---
-import Link from "../components/link.astro"
-import SocialLinks from "../components/social-links.astro"
+import Link from "../components/link.astro";
+import SocialLinks from "../components/social-links.astro";
 ---
 
-<footer class="pt-10 mt-auto text-sm text-stone-400">
-  <div class="flex flex-col gap-2 justify-between pt-6 border-t sm:flex-row border-stone-400">
+<footer class="pt-16 mt-auto text-sm text-stone-400">
+  <div
+    class="flex flex-col justify-between gap-2 pt-6 border-t sm:flex-row border-stone-400"
+  >
     <h1>Mario Pérez Hurtado</h1>
     <SocialLinks />
   </div>
 
   <div class="pt-6">
     <p>
-      Site built with 
+      Site built with
       <Link
         href="https://astro.build/"
-        target="_blank" 
+        target="_blank"
         rel="noopener noreferrer"
       >
         Astro
       </Link>
     </p>
-    <p>
-      Inspired by
-      <Link
-        href="https://haspar.us/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        hasparus
-      </Link>
-      &
-      <Link
-        href="https://nexxel.dev/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        nexxel
-      </Link>
-    </p>
-    <p>
-      Check out the 
-      <Link
-        href="https://github.com/marioperezhurtado/marioph.com"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        source code
-      </Link>
-    </p>
-    <p>
-      Subscribe to the
-      <Link
-        href="/rss.xml"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        RSS feed
-      </Link>
-    </p>
+    Check out the
+    <Link
+      href="https://github.com/marioperezhurtado/marioph.com"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      source code
+    </Link>
   </div>
+  <p>
+    Subscribe to the
+    <Link href="/rss.xml" target="_blank" rel="noopener noreferrer">
+      RSS feed
+    </Link>
+  </p>
 </footer>
