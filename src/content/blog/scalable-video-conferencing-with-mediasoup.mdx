@@ -54,7 +54,7 @@ Relays around NAT) servers to facilitate the connection.
 These protocols are essential for ensuring that peers can connect reliably, regardless of their
 network configurations.
 
-![WebRTC Signalling](/blog/scalable-video-conferencing-with-mediasoup/signalling.png)
+![WebRTC Signalling](https://res.cloudinary.com/marioperezhurtado/image/upload/v1761502887/marioph/blog/scalable-video-conferencing-with-mediasoup/signalling.webp)
 
 ## Why Peer-To-Peer Isn’t Enough
 
@@ -70,7 +70,7 @@ N participants), which can quickly lead to network congestion and degraded perfo
 Once the number of participants exceeds a certain threshold (typically around 4-6 participants),
 the peer-to-peer model becomes highly inefficient and impractical.
 
-![Peer-to-Peer Mesh](/blog/scalable-video-conferencing-with-mediasoup/p2p-mesh.png)
+![Peer-to-Peer Mesh](https://res.cloudinary.com/marioperezhurtado/image/upload/v1761502886/marioph/blog/scalable-video-conferencing-with-mediasoup/p2p-mesh.webp)
 
 At this point, it becomes necessary to introduce a media server to manage and distribute media streams
 more efficiently.
@@ -95,7 +95,7 @@ download usage.
 Additionally, SFUs can optimize bandwidth usage and video quality with techniques such as
 active speaker detection, simulcast, and scalable video coding (SVC), which we will cover later.
 
-![Selective Forwarding Unit (SFU)](/blog/scalable-video-conferencing-with-mediasoup/sfu.png)
+![Selective Forwarding Unit (SFU)](https://res.cloudinary.com/marioperezhurtado/image/upload/v1761502887/marioph/blog/scalable-video-conferencing-with-mediasoup/sfu.webp)
 
 **Multipoint Control Unit (MCU)**
 
@@ -105,7 +105,7 @@ mixes them into a single composite stream, and then sends that composite stream 
 This approach simplifies the client-side implementation, as each participant only needs to receive
 one stream from the MCU.
 
-![Multipoint Control Unit (MCU)](/blog/scalable-video-conferencing-with-mediasoup/mcu.png)
+![Multipoint Control Unit (MCU)](https://res.cloudinary.com/marioperezhurtado/image/upload/v1761502886/marioph/blog/scalable-video-conferencing-with-mediasoup/mcu.webp)
 
 However, MCUs can be resource-intensive and may introduce additional latency due to the mixing process.
 
