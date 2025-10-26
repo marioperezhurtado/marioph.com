@@ -1,7 +1,7 @@
 ---
-import RootLayout from "../../layout/root-layout.astro";
-import Link from "../../components/link.astro";
-import FormattedDate from "../../components/formatted-date.astro";
+import RootLayout from "@/layout/root-layout.astro";
+import Link from "@/components/link.astro";
+import FormattedDate from "@/components/formatted-date.astro";
 import { getCollection } from "astro:content";
 
 const blogPosts = (await getCollection("blog")).sort(

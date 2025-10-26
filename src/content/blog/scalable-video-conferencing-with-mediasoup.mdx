@@ -1,0 +1,127 @@
+---
+title: "Scalable Video Conferencing With Mediasoup"
+description: ""
+pubDate: "oct 26, 2025"
+---
+
+In this post, we’ll explore the core concepts behind building single‑party and multi‑party video
+conferencing apps — from WebRTC basics to SFU, MCU, Mediasoup, and advanced scaling strategies.
+
+## Introduction to WebRTC
+
+WebRTC (Web Real-Time Communication) is a set of open source standards, protocols, codecs, and APIs
+that enable real-time communication directly between web browsers and native applications.
+
+By using WebRTC, developers can add low latency, high-quality audio, video and data sharing
+capabilities to their applications, leveraging peer-to-peer connections and eliminating the need
+for intermediate servers for media transmission.
+
+## How WebRTC Works
+
+**1. Signalling**
+
+Before two peers can establish a WebRTC connection, they need to exchange information about
+each other, such as network addresses and session details.
+
+This is done through a **signalling server**, which is responsible for facilitating the initial
+information exchange between the peers.
+
+The signalling server can be implemented using any technology, although in most cases
+it is typically implemented using WebSockets. The signalling server does **not** handle the media
+transmission itself; it only helps the peers discover each other and establish a connection.
+
+**2. Peer Connection**
+
+Once the peers have exchanged the necessary information through the signalling server, they can
+establish a direct peer-to-peer connection that enables them to send and receive audio, video,
+and data streams directly, without going through an intermediary server.
+
+**3. Media Transmission**
+
+Now that the connection is established, the peers can start transmitting media streams to each other.
+
+WebRTC provides APIs for capturing audio and video from the user's device, encoding and decoding
+media streams, and sending and receiving data over the peer-to-peer connection.
+
+**4. NAT Traversal**
+
+WebRTC relies on ICE (Interactive Connectivity Establishment) to handle NAT (Network Address
+Translation) traversal and establish a connection between peers that may be behind firewalls or NATs.
+
+This process might involve using STUN (Session Traversal Utilities for NAT) and TURN (Traversal Using
+Relays around NAT) servers to facilitate the connection.
+
+These protocols are essential for ensuring that peers can connect reliably, regardless of their
+network configurations.
+
+![WebRTC Signalling](/blog/scalable-video-conferencing-with-mediasoup/signalling.png)
+
+## Why Peer-To-Peer Isn’t Enough
+
+While WebRTC's peer-to-peer mesh architecture works great for one-on-one communication, it has
+limitations when it comes to multi-party video conferencing.
+
+As the number of participants grows, the bandwidth and processing load on each peer also
+increase significantly.
+
+Each participant must send and receive multiple streams (O(N) streams for
+N participants), which can quickly lead to network congestion and degraded performance.
+
+Once the number of participants exceeds a certain threshold (typically around 4-6 participants),
+the peer-to-peer model becomes highly inefficient and impractical.
+
+![Peer-to-Peer Mesh](/blog/scalable-video-conferencing-with-mediasoup/p2p-mesh.png)
+
+At this point, it becomes necessary to introduce a media server to manage and distribute media streams
+more efficiently.
+
+## A Quick Look at SFU and MCU
+
+When building multi-party video conferencing applications, two main architectures are used: Selective
+Forwarding Unit (SFU) and Multipoint Control Unit (MCU).
+
+**Selective Forwarding Unit (SFU)**
+
+An SFU is a media server that receives media streams from multiple participants and selectively forwards
+them to other participants, without any mixing or processing of the streams.
+
+In an SFU architecture, each participant sends their media stream to the SFU, which then forwards
+the streams to other participants based on their subscriptions. This approach reduces the bandwidth
+requirements for each participant, as they only need to send their stream once to the SFU.
+
+Participants can subscribe to specific streams based on their needs, allowing for more efficient
+download usage.
+
+Additionally, SFUs can optimize bandwidth usage and video quality with techniques such as
+active speaker detection, simulcast, and scalable video coding (SVC), which we will cover later.
+
+![Selective Forwarding Unit (SFU)](/blog/scalable-video-conferencing-with-mediasoup/sfu.png)
+
+**Multipoint Control Unit (MCU)**
+
+An MCU is a more complex media server that receives media streams from multiple participants,
+mixes them into a single composite stream, and then sends that composite stream back to each participant.
+
+This approach simplifies the client-side implementation, as each participant only needs to receive
+one stream from the MCU.
+
+![Multipoint Control Unit (MCU)](/blog/scalable-video-conferencing-with-mediasoup/mcu.png)
+
+However, MCUs can be resource-intensive and may introduce additional latency due to the mixing process.
+
+They are also much less scalable than SFUs, especially for large conferences. While they can be useful
+for specific use cases, they are generally less common in modern video conferencing applications compared
+to SFUs.
+
+SFUs are typically preferred for their scalability and efficiency, especially in scenarios with a large
+number of participants. They have become the standard architecture for most modern video conferencing
+applications, balancing performance, scalability, and complexity.
+
+In the next section, we will explore [Mediasoup](https://mediasoup.org/), a popular open-source SFU that provides a robust
+foundation for building scalable video conferencing applications.
+
+## Building a Video Conferencing App With Mediasoup
+
+## Scaling Mediasoup for Large Conferences
+
+## Conclusion

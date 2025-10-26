@@ -1,11 +1,11 @@
 ---
-import Link from "../../components/link.astro";
+import Link from "@/components/link.astro";
 
 const PROJECTS = [
   {
     title: "Boble",
     description: "Real-time web chat.",
-    link: "https://boble.chat/",
+    link: "https://github.com/marioperezhurtado/boble2",
   },
   {
     title: "Arbicuir",
@@ -23,7 +23,7 @@ const PROJECTS = [
 <section class="mb-16">
   <h2 class="pb-2 text-lg font-bold text-stone-200">Projects</h2>
 
-  <ul class="flex flex-col gap-2 pb-3 text-sm">
+  <ul class="flex flex-col gap-3 pb-3 text-sm">
     {
       PROJECTS.map((project) => (
         <li>
