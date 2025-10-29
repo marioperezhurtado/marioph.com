@@ -18,7 +18,7 @@ you must use the `mut` keyword. Functions also need to declare if they intend to
 
 We must be **explicit** about whether we are going to change the value of any variable, making our code more robust, predictable, and easier to reason about.
 
-```rust showLineNumbers title="main.rs" /mut bar/ /mut buzz/
+```rust title="main.rs" /mut bar/ /mut buzz/
 let foo = 5;
 let mut bar = 10;  // `bar` is mutable
 
@@ -36,7 +36,7 @@ buzz.push(20)  // ✔
 
 Rust's _pattern matching_ syntax is a powerful tool for handling complex data types and writing robust and expressive code.
 
-```rust showLineNumbers title="message.rs"
+```rust title="message.rs"
 enum Message {
 	Quit,
 	Move { x: i32, y: i32 },
@@ -48,7 +48,7 @@ enum Message {
 The `match` statement allow us to compare a value against a series of _patterns_
 and then execute code based on which pattern matches. We can represent all the possible states of our application and safely handle every scenario in a concise and expressive way.
 
-```rust showLineNumbers title="message.rs"
+```rust title="message.rs"
 fn handle_message(msg: Message) {
 	match msg {
 		Message::Quit => println!("Goodbye!"),
@@ -68,7 +68,7 @@ Rust treats errors as values. instead of _throwing_ and error and hoping that so
 
 `Result` is an `enum` which value can be either `Ok` or `Err`. each variant represents the success or failure of the operation, with its resulting value.
 
-```rust showLineNumbers title="src/core/lib.rs"
+```rust title="src/core/lib.rs"
 enum Result<T, E> {
     Ok(T),
     Err(E),
@@ -78,7 +78,7 @@ enum Result<T, E> {
 Consider this code that reads from a text file. The `read_to_string` function
 has a return type of `Result`. that indicates that the code might contain an error, thus forcing to handle it before using the result.
 
-```rust showLineNumbers title="read_file.rs"
+```rust title="read_file.rs"
 use std::fs;
 
 fn read_from_file(path: &str) {
@@ -93,7 +93,7 @@ fn read_from_file(path: &str) {
 
 If we do not want to handle it now, we must modify the function signature to indicate that the result of this function could potentially be an error.
 
-```rust showLineNumbers title="read_file.rs" /Result<String, Error>/
+```rust title="read_file.rs" /Result<String, Error>/
 use std::fs;
 use std::io::Error;
 
@@ -104,7 +104,7 @@ fn read_from_file(path: &str) -> Result<String, Error> {
 
 By combining _errors as values_ with `enums` and pattern matching, Rust ensures that we correctly handle all possible errors in our code.
 
-```rust showLineNumbers title="read_file.rs"
+```rust title="read_file.rs"
 match error.kind() {
     ErrorKind::NotFound => ...,
     ErrorKind::PermissionDenied => ...,
@@ -117,7 +117,7 @@ former solution.
 
 In TypeScript, errors are thrown without any built-in mechanism to ensure that all error scenarios are properly handled or even if they will be handled at all.
 
-```typescript showLineNumbers title="error_handling.ts" /err: ???/
+```typescript title="error_handling.ts" /err: ???/
 try {
   // Do I need to handle a potential error?
   does_this_throw()
@@ -154,7 +154,7 @@ particular implementation. As such, Rust does not have nulls, but it does have 
 `Option` is an `enum` that encodes the very common scenario in which a value
 could be something or it could be nothing. An `Option` type can be either `Some`, with a value, or `None`, that represents the absence of a value.
 
-```rust showLineNumbers title="src/core/lib.rs"
+```rust title="src/core/lib.rs"
 enum Option<T> {
     Some(T),
     None,
@@ -164,7 +164,7 @@ enum Option<T> {
 The Rust compiler ensures that you convert an `Option<T>` to a `T` before you
 can perform `T` operations with it. Generally, this helps catch one of the most common issues with null: assuming that something isn’t null when it actually is.
 
-```rust showLineNumbers title="find_haystack.rs" /Option<usize>/
+```rust title="find_haystack.rs" /Option<usize>/
 fn find(haystack: &str, needle: char) -> Option<usize> {
     for (index, c) in haystack.char_indices() {
         if c == needle {

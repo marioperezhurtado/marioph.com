@@ -9,6 +9,7 @@ const blog = defineCollection({
     pubDate: z
       .string()
       .transform((val) => new Date(val)),
+    draft: z.boolean().optional(),
   })
 })
 

@@ -1,16 +1,18 @@
 ---
-title: "Scalable Video Conferencing With Mediasoup"
-description: ""
+title: "Scalable Video Conferencing With MediaSoup"
+description: "From WebRTC basics to SFU, MCU, MediaSoup, and advanced scaling strategies."
 pubDate: "oct 26, 2025"
+draft: true
 ---
 
-In this post, we’ll explore the core concepts behind building single‑party and multi‑party video
-conferencing apps — from WebRTC basics to SFU, MCU, Mediasoup, and advanced scaling strategies.
+In this post, we’ll explore the core concepts behind building one-on-one and multi‑party video
+conferencing apps — from WebRTC basics to SFU, MCU, MediaSoup, and advanced scaling strategies.
 
 ## Introduction to WebRTC
 
-WebRTC (Web Real-Time Communication) is a set of open source standards, protocols, codecs, and APIs
-that enable real-time communication directly between web browsers and native applications.
+[WebRTC](https://webrtc.org/) (Web Real-Time Communication) is a set of open source standards,
+protocols, codecs, and APIs that enable real-time communication directly between web browsers
+and native applications.
 
 By using WebRTC, developers can add low latency, high-quality audio, video and data sharing
 capabilities to their applications, leveraging peer-to-peer connections and eliminating the need
@@ -27,8 +29,8 @@ This is done through a **signalling server**, which is responsible for facilitat
 information exchange between the peers.
 
 The signalling server can be implemented using any technology, although in most cases
-it is typically implemented using WebSockets. The signalling server does **not** handle the media
-transmission itself; it only helps the peers discover each other and establish a connection.
+it is typically implemented using WebSockets. The signalling server **does not** handle the
+media transmission itself; it only helps the peers discover each other and establish a connection.
 
 **2. Peer Connection**
 
@@ -45,11 +47,14 @@ media streams, and sending and receiving data over the peer-to-peer connection.
 
 **4. NAT Traversal**
 
-WebRTC relies on ICE (Interactive Connectivity Establishment) to handle NAT (Network Address
-Translation) traversal and establish a connection between peers that may be behind firewalls or NATs.
+WebRTC relies on [ICE](https://developer.mozilla.org/es/docs/Web/API/WebRTC_API/Protocols#ice)
+(Interactive Connectivity Establishment) to handle [NAT](https://developer.mozilla.org/es/docs/Web/API/WebRTC_API/Protocols#nat)
+(Network Address Translation) traversal and establish a connection between peers that may be behind
+firewalls or NATs.
 
-This process might involve using STUN (Session Traversal Utilities for NAT) and TURN (Traversal Using
-Relays around NAT) servers to facilitate the connection.
+This process might involve using [STUN](https://developer.mozilla.org/es/docs/Web/API/WebRTC_API/Protocols#stun)
+(Session Traversal Utilities for NAT) and [TURN](https://developer.mozilla.org/es/docs/Web/API/WebRTC_API/Protocols#turn)
+(Traversal Using Relays around NAT) servers to facilitate the connection.
 
 These protocols are essential for ensuring that peers can connect reliably, regardless of their
 network configurations.
@@ -64,8 +69,8 @@ limitations when it comes to multi-party video conferencing.
 As the number of participants grows, the bandwidth and processing load on each peer also
 increase significantly.
 
-Each participant must send and receive multiple streams (O(N) streams for
-N participants), which can quickly lead to network congestion and degraded performance.
+Each participant must send and receive multiple streams (O(_N_) streams for
+_N_ participants), which can quickly lead to network congestion and degraded performance.
 
 Once the number of participants exceeds a certain threshold (typically around 4-6 participants),
 the peer-to-peer model becomes highly inefficient and impractical.
@@ -82,15 +87,12 @@ Forwarding Unit (SFU) and Multipoint Control Unit (MCU).
 
 **Selective Forwarding Unit (SFU)**
 
-An SFU is a media server that receives media streams from multiple participants and selectively forwards
+An [SFU]() is a media server that receives media streams from multiple participants and selectively forwards
 them to other participants, without any mixing or processing of the streams.
 
 In an SFU architecture, each participant sends their media stream to the SFU, which then forwards
 the streams to other participants based on their subscriptions. This approach reduces the bandwidth
 requirements for each participant, as they only need to send their stream once to the SFU.
-
-Participants can subscribe to specific streams based on their needs, allowing for more efficient
-download usage.
 
 Additionally, SFUs can optimize bandwidth usage and video quality with techniques such as
 active speaker detection, simulcast, and scalable video coding (SVC), which we will cover later.
@@ -99,7 +101,7 @@ active speaker detection, simulcast, and scalable video coding (SVC), which we w
 
 **Multipoint Control Unit (MCU)**
 
-An MCU is a more complex media server that receives media streams from multiple participants,
+An [MCU]() is a more complex media server that receives media streams from multiple participants,
 mixes them into a single composite stream, and then sends that composite stream back to each participant.
 
 This approach simplifies the client-side implementation, as each participant only needs to receive
@@ -117,11 +119,267 @@ SFUs are typically preferred for their scalability and efficiency, especially in
 number of participants. They have become the standard architecture for most modern video conferencing
 applications, balancing performance, scalability, and complexity.
 
-In the next section, we will explore [Mediasoup](https://mediasoup.org/), a popular open-source SFU that provides a robust
-foundation for building scalable video conferencing applications.
+In the next section, we will explore [MediaSoup](https://mediasoup.org/), a popular open-source SFU that
+provides a robust foundation for building scalable video conferencing applications.
 
-## Building a Video Conferencing App With Mediasoup
+## Introduction to MediaSoup
 
-## Scaling Mediasoup for Large Conferences
+MediaSoup is not a standalone server, but rather just a Node.js module (or Rust crate) that you can integrate
+into your application.
 
-## Conclusion
+It acts as an SFU, receiving media streams from participants and relaying them to others.
+
+Given that MediaSoup does not transcode or mix media, it is highly scalable and requires much
+less resources compared to an MCU.
+
+Each participant can select which streams they want to receive, allowing for efficient bandwidth
+usage. And since participants get the streams separately, they can have a personalized layout,
+choosing which streams to display and how.
+
+MediaSoup is signalling agnostic: it does not mandate any specific signalling protocol, so you
+can implement your signalling server using any technology of your choice.
+
+It includes a client library ([mediasoup-client](https://www.npmjs.com/package/mediasoup-client)),
+which simplifies the process of connecting to a MediaSoup server and handling media streams.
+
+## Building a Video Conferencing App with MediaSoup
+
+![MediaSoup Architecture](/mediasoup.png)
+
+**1. Setting up workers and routers**
+
+The server application creates one or more `Workers`, each running in its own CPU
+core. Each worker can host multiple `Routers`, which are responsible for managing media streams.
+
+> Note: In an actual production application, you would typically create multiple workers
+> (one per CPU core) to fully utilize the server's resources. Additionally, you would create
+> multiple routers to segregate different conferences or rooms. For simplicity, this example
+> uses one single worker and router.
+
+```typescript title="server.js"
+import { createWorker } from "mediasoup";
+
+// Create Worker
+const worker = await createWorker(config);
+
+// Create Router
+const router = await worker.createRouter({
+  mediaCodecs: [
+    {
+      kind: "audio",
+      mimeType: "audio/opus",
+      clockRate: 48000,
+      channels: 2,
+    },
+    {
+      kind: "video",
+      mimeType: "video/H264",
+      clockRate: 90000,
+      parameters: {},
+    },
+  ],
+});
+```
+
+**2. Device loading**
+
+The client application loads its `Device` by providing it with the RTP capabilities
+of the server side `Router`.
+
+```typescript title="client.js"
+import { Device } from "mediasoup-client";
+
+// Create Device
+const device = new Device();
+
+// Ask server for RTP capabilities¹
+const routerRtpCapabilities = await socket.emitWithAck("rtp-capabilities");
+
+// Load Device with server RTP capabilities
+await device.load({ routerRtpCapabilities });
+```
+
+```typescript title="server.js"
+// Send router RTP capabilities to client¹
+socket.on("rtp-capabilities", (ack) => {
+  ack(router.rtpCapabilities);
+});
+```
+
+**3. Creating transports**
+
+A WebRTC `Transport` must be first created in the `Router`, and then replicated in the
+client application.
+
+```typescript title="client.js"
+// Create producer Transport¹
+const producerTransportParams = await socket.emitWithAck("create-producer-transport");
+const producerTransport = device.createSendTransport(producerTransportParams);
+
+// Create consumer Transport²
+const consumerTransportParams = await socket.emitWithAck("create-consumer-transport");
+const consumerTransport = device.createRecvTransport(consumerTransportParams);
+```
+
+```typescript title="server.js"
+socket.on("create-producer-transport", async (ack) => {
+  // Create server side producer Transport
+  producerTransport = await router.createWebRtcTransport(config);
+
+  // Send producer Transport parameters to client¹
+  const producerTransportParams = {
+    id: producerTransport.id,
+    iceParameters: producerTransport.iceParameters,
+    iceCandidates: producerTransport.iceCandidates,
+    dtlsParameters: producerTransport.dtlsParameters,
+  };
+
+  ack(producerTransportParams);
+});
+
+socket.on("create-consumer-transport", async (ack) => {
+  // Create server side consumer Transport
+  consumerTransport = await router.createWebRtcTransport(config);
+
+  // Send consumer Transport parameters to client²
+  const consumerTransportParams = {
+    id: consumerTransport.id,
+    iceParameters: consumerTransport.iceParameters,
+    iceCandidates: consumerTransport.iceCandidates,
+    dtlsParameters: consumerTransport.dtlsParameters,
+  };
+
+  ack(consumerTransportParams);
+});
+```
+
+**4. Producing media**
+
+Once the send `Transport` is created, the client application can produce multiple audio and
+video tracks on it.
+
+The client application obtains a track (e.g., `getUserMedia()`), and calls `produce()` on the
+`Transport` instance.
+
+- The transport will emit “connect” if this is the first call to `produce()`, then the client
+  application signals the DTLS parameters to the server, which will connect the server side 
+  `Transport`.
+- The transport will emit “produce”, then the client application signals the event parameters
+  to the server, which will create the server side `Producer`.
+- Finally, `produce()` will resolve with a client side `Producer` instance.
+
+```typescript title="client.js"
+// Get user media
+const stream = await navigator.mediaDevices.getUserMedia({
+  audio: true,
+  video: true,
+});
+const track = stream.getVideoTracks()[0];
+
+// Create Producer
+const producer = await producerTransport.produce({ track });
+
+// Render local video
+localVideo.srcObject = new MediaStream([track]);
+
+// ...
+
+producerTransport.on("connect", async (dtlsParameters, cb) => {
+  // Signal DTLS parameters to server¹
+  await socket.emit("connect-transport", dtlsParameters);
+});
+
+producerTransport.on("produce", async (parameters, cb) => {
+  // Signal Producer parameters to server²
+  const id = await socket.emitWithAck("produce", parameters); 
+
+  // Return server side Producer id to client
+  cb({ id });
+});
+```
+
+```typescript title="server.js"
+socket.on("connect-transport", async (dtlsParamaters) => {
+    // Connect server side Transport¹
+    await producerTransport.connect(dtlsParamaters);
+});
+
+socket.on("produce", async (parameters, ack) => {
+  // Create server side Producer²
+  const producer = await producerTransport.produce(parameters);
+
+  // Send Producer id to client
+  ack(producer.id);
+});
+```
+
+**5. Consuming media**
+
+Once the receive `Transport` is created, the client application can consume multiple audio
+and video tracks on it.
+
+However the order is the opposite (here the `Consumer` must be created in the server first).
+
+The client application signals its RTP capabilities to the server, which checks whether the
+`Device` can consume the `Producer`.
+
+Then the server application creates a server side `Consumer` and transmits the event parameters
+to the client, which will also create a client side `Consumer` instance.
+
+> Note: When creating a server side Consumer it is recommended to set **paused** to **true**,
+> and once the client has created its client side Consumer, **unpause** the server side Consumer.
+> This optimization avoids unnecessary media transmission while the client is setting up its
+> Consumer.
+
+```typescript title="client.js"
+// Signal RTP capabilities to server¹
+const consumerParams = await socket.emitWithAck("consume", {
+  rtpCapabilities: device.rtpCapabilities,
+});
+
+// Create Consumer
+const consumer = await consumerTransport.consume(consumerParams);
+
+// Render remote video
+remoteVideo.srcObject = new MediaStream([consumer.track]);
+
+// Resume the server side Consumer²
+await socket.emit("resume", { consumerId: consumer.id });
+```
+
+```typescript title="server.js"
+socket.on("consume", async (data, ack) => {
+  // Create Consumer
+  consumer = await consumerTransport.consume({
+    producerId: producer.id,
+    rtpCapabilities: data.rtpCapabilities,
+    paused: true, // Start paused (as explained above)
+  });
+
+  // Send Consumer parameters to client¹
+  const consumerParams = {
+    id: consumer.id,
+    producerId: producer.id,
+    kind: consumer.kind,
+    rtpParameters: consumer.rtpParameters,
+  };
+
+  ack(consumerParams);
+});
+
+socket.on("resume", async () => {
+    // Resume server side Consumer²
+    await consumer.resume();
+});
+```
+
+## Scaling MediaSoup for Large Conferences
+
+Coming soon...
+
+## Other Resources
+
+- [WebRTC in 100 Seconds](https://www.youtube.com/watch?v=WmR9IMUD_CY)
+- [How to Scale WebRTC Applications Efficiently](https://www.youtube.com/watch?v=V8dIDXTF5Vo)
+- [What is MediaSoup and How Does It Work?](https://www.youtube.com/watch?v=LyOn6YyRdjI)
+- [MediaSoup Documentation](https://mediasoup.org/documentation/v3/)
