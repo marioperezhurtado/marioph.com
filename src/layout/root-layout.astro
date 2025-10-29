@@ -1,17 +1,18 @@
 ---
-import "@fontsource/geist-mono";
-
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import Header from "./header.astro";
 import Footer from "./footer.astro";
+import "@fontsource/geist-mono";
+import "@/styles/global.css";
 
 interface Props {
   title: string;
   description: string;
   image?: string;
+  noIndex?: boolean;
 }
 
-const { title, description, image = "/og.png" } = Astro.props;
+const { title, description, image = "/og.png", noIndex } = Astro.props;
 ---
 
 <html lang="en">
@@ -42,7 +43,9 @@ const { title, description, image = "/og.png" } = Astro.props;
     <meta name="twitter:card" content="summary_large_image" />
     <meta property="twitter:image" content={image} />
 
-    <ViewTransitions />
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+    <ClientRouter />
   </head>
   <body
     class="flex flex-col max-w-screen-sm min-h-screen p-5 mx-auto font-mono bg-stone-900 text-stone-300 sm:py-10"
@@ -50,16 +53,5 @@ const { title, description, image = "/og.png" } = Astro.props;
     <Header />
     <slot />
     <Footer />
-  </body><style is:global>
-    html {
-      scroll-behavior: smooth;
-    }
-    body {
-      overflow-y: scroll;
-    }
-    h2::before {
-      content: "#";
-      margin-right: 0.6em;
-    }
-  </style>
+  </body>
 </html>

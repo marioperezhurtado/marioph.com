@@ -12,7 +12,7 @@ Progressive enhancement is a web development technique that focuses on using the
 
 Do you recall how the native `form` HTML element works? When you submit a form, the browser will send a request to the server, and the server will respond with a new HTML page.
 
-```html title="index.html" showLineNumbers
+```html title="index.html"
 <form>
   <input type="email" name="email" />
   <input type="password" name="password" />
@@ -27,7 +27,7 @@ With modern JavaScript frameworks, we might intercept the form submission,
 prevent the browser's default behaviour, and use the `fetch` API to send the
 form data to the server. Then, we use the response to update the DOM using JavaScript.
 
-```tsx showLineNumbers title="todos.tsx" /preventDefault()/ /onSubmit/ 
+```tsx title="todos.tsx" /preventDefault()/ /onSubmit/ 
 export default function Todos() {
   function handleCreateTodo(event) {
     event.preventDefault();
@@ -138,7 +138,7 @@ much effort?
 Libraries like [Radix UI](https://www.radix-ui.com/) or [Headless
 UI](https://headlessui.com/) help us build fully accessible web apps without the hassle.
 
-```tsx showLineNumbers title="my-accessible-dropdown.tsx"
+```tsx title="my-accessible-dropdown.tsx"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 export default function MyAccessibleDropdown() {
@@ -185,7 +185,7 @@ Let's see an example of how we can achieve this.
 In this example I will be using [SvelteKit](https://kit.svelte.dev/), but there
 are lots of other frameworks that share similar patterns, like [Remix](https://remix.run).
 
-```svelte showLineNumbers title="todos.svelte" /create/
+```svelte title="todos.svelte" /create/
 <form method="POST" action="?/create">
 	<label>
     Title:
@@ -206,7 +206,7 @@ We have a server `action` that will handle the form submission. Don't worry
 about the details of this function, just note that it will create a new todo in
 the database.
 
-```ts showLineNumbers title="+page.server.ts" /create:/
+```ts title="+page.server.ts" /create:/
 import type { Actions } from './$types';
 
 export const actions = {
@@ -245,7 +245,7 @@ reload. It will:
 And we can add stuff like **pending states**, **animations**, and **optimistic
 UI**.
 
-```svelte showLineNumbers title="todos.svelte" {2,3,8,14-21,26,35-37}
+```svelte title="todos.svelte" {2,3,8,14-21,26,35-37}
 <script lang="ts">
   import { fly, slide } from 'svelte/transition';
   import { enhance } from '$app/forms';

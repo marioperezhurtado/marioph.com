@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: "Geist Mono", "sans-serif";
+  --breakpoint-xs: 500px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  overflow-y: scroll;
+}
+h2::before {
+  content: "#";
+  margin-right: 0.6em;
+}

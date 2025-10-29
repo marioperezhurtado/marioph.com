@@ -1,30 +1,53 @@
 ---
-import RootLayout from "../layout/root-layout.astro";
-import Link from "./link.astro";
-import FormatedDate from "../components/formatted-date.astro";
-import ReadingProgress from "../components/reading-progress.astro";
+import RootLayout from "@/layout/root-layout.astro";
+import Link from "@/components/link.astro";
+import FormatedDate from "@/components/formatted-date.astro";
+import ReadingProgress from "@/components/reading-progress.astro";
 
 import type { CollectionEntry } from "astro:content";
 type Props = CollectionEntry<"blog">;
 
 const {
   slug,
-  data: { title, description, pubDate },
+  data: { title, description, pubDate, draft },
+  body,
 } = Astro.props;
+
+const minutesToRead = Math.ceil(body.split(" ").length / 200);
 ---
 
 <RootLayout
   title={title}
   description={description}
   image={`/blog/${slug}/og.png`}
+  noIndex={!!draft}
 >
   <ReadingProgress />
+
   <article>
     <Link href="/blog">← Back </Link>
+
+    {
+      draft && (
+        <div
+          class="p-4 mt-6 text-sm text-yellow-700 bg-yellow-100 border-yellow-500 border-l-5"
+          role="alert"
+        >
+          <span class="font-bold">🚧 Heads up:</span> This content is currently
+          a draft. Things may change!
+        </div>
+      )
+    }
+
     <h2 class="pt-6 text-lg font-bold">
       <span class="-ml-[1ch]">{title}</span>
     </h2>
-    <FormatedDate date={pubDate} />
+    <p class="flex flex-wrap items-center gap-2">
+      <FormatedDate date={pubDate} />
+      <span class="text-sm text-stone-400">
+        • {minutesToRead} min read
+      </span>
+    </p>
 
     <hr class="h-px mt-4 mb-8 border-0 bg-stone-400" />
     <div id="blog">
