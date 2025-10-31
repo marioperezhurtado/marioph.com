@@ -95,7 +95,7 @@ the streams to other participants based on their subscriptions. This approach re
 requirements for each participant, as they only need to send their stream once to the SFU.
 
 Additionally, SFUs can optimize bandwidth usage and video quality with techniques such as
-active speaker detection, simulcast, and scalable video coding (SVC), which we will cover later.
+dominant speaker detection, simulcast, and scalable video coding (SVC), which we will cover later.
 
 ![Selective Forwarding Unit (SFU)](https://res.cloudinary.com/marioperezhurtado/image/upload/v1761502887/marioph/blog/scalable-video-conferencing-with-mediasoup/sfu.webp)
 
@@ -130,7 +130,7 @@ into your application.
 It acts as an SFU, receiving media streams from participants and relaying them to others.
 
 Given that MediaSoup does not transcode or mix media, it is highly scalable and requires much
-less resources compared to an MCU.
+fewer resources compared to an MCU.
 
 Each participant can select which streams they want to receive, allowing for efficient bandwidth
 usage. And since participants get the streams separately, they can have a personalized layout,
@@ -153,7 +153,7 @@ core. Each worker can host multiple `Routers`, which are responsible for managin
 
 > Note: In an actual production application, you would typically create multiple workers
 > (one per CPU core) to fully utilize the server's resources. Additionally, you would create
-> multiple routers to segregate different conferences or rooms. For simplicity, this example
+> multiple routers to separate different conferences or rooms. For simplicity, this example
 > uses one single worker and router.
 
 ```typescript title="server.js"
@@ -213,11 +213,15 @@ client application.
 
 ```typescript title="client.js"
 // Create producer Transport¹
-const producerTransportParams = await socket.emitWithAck("create-producer-transport");
+const producerTransportParams = await socket.emitWithAck(
+  "create-producer-transport"
+);
 const producerTransport = device.createSendTransport(producerTransportParams);
 
 // Create consumer Transport²
-const consumerTransportParams = await socket.emitWithAck("create-consumer-transport");
+const consumerTransportParams = await socket.emitWithAck(
+  "create-consumer-transport"
+);
 const consumerTransport = device.createRecvTransport(consumerTransportParams);
 ```
 
@@ -262,7 +266,7 @@ The client application obtains a track (e.g., `getUserMedia()`), and calls `prod
 `Transport` instance.
 
 - The transport will emit “connect” if this is the first call to `produce()`, then the client
-  application signals the DTLS parameters to the server, which will connect the server side 
+  application signals the DTLS parameters to the server, which will connect the server side
   `Transport`.
 - The transport will emit “produce”, then the client application signals the event parameters
   to the server, which will create the server side `Producer`.
@@ -291,7 +295,7 @@ producerTransport.on("connect", async (dtlsParameters, cb) => {
 
 producerTransport.on("produce", async (parameters, cb) => {
   // Signal Producer parameters to server²
-  const id = await socket.emitWithAck("produce", parameters); 
+  const id = await socket.emitWithAck("produce", parameters);
 
   // Return server side Producer id to client
   cb({ id });
@@ -300,8 +304,8 @@ producerTransport.on("produce", async (parameters, cb) => {
 
 ```typescript title="server.js"
 socket.on("connect-transport", async (dtlsParamaters) => {
-    // Connect server side Transport¹
-    await producerTransport.connect(dtlsParamaters);
+  // Connect server side Transport¹
+  await producerTransport.connect(dtlsParamaters);
 });
 
 socket.on("produce", async (parameters, ack) => {
@@ -368,14 +372,88 @@ socket.on("consume", async (data, ack) => {
 });
 
 socket.on("resume", async () => {
-    // Resume server side Consumer²
-    await consumer.resume();
+  // Resume server side Consumer²
+  await consumer.resume();
 });
 ```
 
 ## Scaling MediaSoup for Large Conferences
 
-Coming soon...
+**1. Distribute Routers, Workers and Hosts**
+
+Depending on the host CPU capabilities, a MediaSoup C++ subprocess (a `Worker`) can typically
+handle around 500 consumers in total.
+
+- The server side application using MediaSoup should launch as many `Workers` as required (no
+  more than the number of CPU cores on the host), and distribute `Routers` across them.
+
+- If higher capability is required, the application can be horizontally scaled by deploying it
+  across multiple hosts, distributing `Routers` across them.
+
+- For very large conferences, the number of streams per core may become a limitation. In such
+  cases, the `pipeToRouter` feature can be used to interconnect `Routers` running in separate
+  `Workers` (on different CPU cores), even across different hosts.
+
+There is no universal right way to scale. Since MediaSoup is very low-level, it does not
+prevent you from implementing your own scaling strategies based on your specific use case.
+
+**2. Dominant Speaker Detection**
+
+**3. Adaptive Streaming**
+
+**Simulcast**
+
+[Simulcast](https://mediasoup.org/documentation/v3/mediasoup/rtp-parameters-and-capabilities/#Simulcast) 
+consists of sending multiple versions of the same video stream at different qualities.
+
+Each version is sent as a separate RTP stream (each with its own SSRC or RID), allowing the SFU to forward the most appropriate
+version to each participant based on their network conditions and device capabilities.
+
+If the `Producer` uses simulcast with 3 streams, MediaSoup will forward a single and continuous 
+stream to the `Consumer`.
+
+```typescript title="server.js"
+// Create Producer with simulcast
+const producer = await producerTransport.produce({
+  track,
+  encodings: [
+    { ssrc: 111110, active: true, maxBitrate: 100000 },
+    { ssrc: 111111, active: true, maxBitrate: 300000 },
+    { ssrc: 111112, active: true, maxBitrate: 900000 },
+  ],
+});
+```
+
+**Scalable Video Coding (SVC)**
+
+[Scalable Video Coding (SVC)](https://mediasoup.org/documentation/v3/mediasoup/rtp-parameters-and-capabilities/#SVC)
+consists of encoding a single video stream into multiple layers of quality that build upon each 
+other.
+
+Instead of sending multiple separate RTP streams like in simulcast, SVC sends a single RTP stream
+that contains all the layers.
+
+Then the SFU can then selectively forward the appropriate layers to each participant based on 
+their network conditions and device capabilities.
+
+```typescript title="server.js"
+// Create Producer with SVC
+const producer = await producerTransport.produce({
+  track,
+  encodings: [
+    { scalabilityMode: "L1T2", maxBitrate: 900000 }
+  ],
+});
+```
+
+## Conclusion
+
+In this post, we explored the fundamentals of WebRTC, the limitations of peer-to-peer,
+media server architectures, MediaSoup basics, and scaling strategies.
+
+If you want to dive deeper into building video conferencing applications with MediaSoup,
+consider exploring the official [MediaSoup documentation](https://mediasoup.org/documentation/v3/),
+which provides comprehensive guides, API references, and examples to help you get started.
 
 ## Other Resources
 
