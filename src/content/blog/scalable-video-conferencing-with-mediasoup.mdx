@@ -1,8 +1,7 @@
 ---
 title: "Scalable Video Conferencing With MediaSoup"
 description: "From WebRTC basics to SFU, MCU, MediaSoup, and advanced scaling strategies."
-pubDate: "oct 26, 2025"
-draft: true
+pubDate: "nov 1, 2025"
 ---
 
 In this post, we’ll explore the core concepts behind building one-on-one and multi‑party video
@@ -391,13 +390,50 @@ handle around 500 consumers in total.
   across multiple hosts, distributing `Routers` across them.
 
 - For very large conferences, the number of streams per core may become a limitation. In such
-  cases, the `pipeToRouter` feature can be used to interconnect `Routers` running in separate
+  cases, the [pipeToRouter](https://mediasoup.org/documentation/v3/mediasoup/api/#router-pipeToRouter)
+  feature can be used to interconnect `Routers` running in separate
   `Workers` (on different CPU cores), even across different hosts.
 
 There is no universal right way to scale. Since MediaSoup is very low-level, it does not
 prevent you from implementing your own scaling strategies based on your specific use case.
 
 **2. Dominant Speaker Detection**
+
+Displaying all video streams in large conferences is both impractical and inefficient. The 
+user interface quickly becomes cluttered, making it difficult for participants to focus on 
+the most relevant content.
+
+In practice, even in conferences with many participants, only a few are actively speaking at 
+any given time.
+
+To address this, implementing **dominant speaker detection** is a common and effective 
+strategy. This approach involves identifying the most prominent speaker in the conference,
+and prioritizing their video stream for display. It optimizes performance by reducing the number
+of video streams that need to be consumed and rendered by each participant.
+
+For example, a video conferencing application might highlight the video stream of the current 
+dominant speaker, along with a few recent speakers, rather than displaying all participants'
+streams simultaneously.
+
+Mediasoup provides a built-in [ActiveSpeakerObserver](https://mediasoup.org/documentation/v3/mediasoup/api/#ActiveSpeakerObserver) 
+that monitors the speech activity of the selected audio `Producers`.
+
+```typescript title="server.js"
+// Create ActiveSpeakerObserver
+const activeSpeakerObserver = router.createActiveSpeakerObserver({
+  interval: 300
+});
+
+activeSpeakerObserver.on("dominantspeaker", ({ producerId }) => {
+  // Notify clients about the dominant speaker
+  socket.emit("dominant-speaker", { producerId });
+});
+
+// ...
+
+// Add audio Producers to ActiveSpeakerObserver
+activeSpeakerObserver.addProducer(audioProducer);
+```
 
 **3. Adaptive Streaming**
 
@@ -448,7 +484,7 @@ const producer = await producerTransport.produce({
 
 ## Conclusion
 
-In this post, we explored the fundamentals of WebRTC, the limitations of peer-to-peer,
+In this post, we learned about the fundamentals of WebRTC, the limitations of peer-to-peer,
 media server architectures, MediaSoup basics, and scaling strategies.
 
 If you want to dive deeper into building video conferencing applications with MediaSoup,
